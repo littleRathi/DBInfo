@@ -28,7 +28,7 @@ public interface ExceptionMessages {
 	String EXC_EXTRACTOR_NO_ARGUMENTS = "The method '%s' contains no arguments, but one is needed.";
 	String EXC_EXTRACTOR_NEED_VALUES = "The property values() from the '@" + ArgumentValues.class + "' must be a array with minimum 1 value fro argument '%s'.";
 	String EXC_EXTRACTOR_VALUES_NO_NAME = "The '@" + ArgumentValues.class + "' annotation for argument '%s' has a value for property name(), which should not be set, because the field/method has also the '@" + Argument.class + " annotation.";
-	String EXC_EXTRACTOR_NO_VALUES_ALLOWED = "The property values() from '@" + ArgumentValues.class + "' for argument '-%s' should be empty/not be set.";
+	String EXC_EXTRACTOR_NO_VALUES_ALLOWED = "The property values() from '@" + ArgumentValues.class + "' at the element '%s' for argument '%s' should be empty/not be set.";
 	String EXC_EXTRACTOR_VALUES_NEED_NAME = "The property name() from '@" + ArgumentValues.class + " have to be set for element '%s'.";
 	String EXC_EXTRACTOR_VALUES_ELEMENT_NOT_STATIC = "The element '%s' is not static. A element with the '@" + ArgumentValues.class + "' annotation must be static.";
 	String EXC_EXTRACTOR_VALUES_WRONG_TYPE = "The element '%s' should be a array of String as field type or only parameter type of the method, that is annotated with '@" + ArgumentValues.class + "'.";

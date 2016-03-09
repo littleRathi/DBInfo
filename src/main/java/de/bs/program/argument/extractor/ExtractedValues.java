@@ -16,7 +16,6 @@ import de.bs.program.argument.ExceptionMessages;
 public class ExtractedValues implements ExceptionMessages {
 	private ArgumentValues argumentValues;
 	private ExtractedArgument argument;
-	private boolean useValuesField;
 	private String[][] values;
 	private List<Set<String>> valuesSet = new LinkedList<Set<String>>();
 	
@@ -34,9 +33,6 @@ public class ExtractedValues implements ExceptionMessages {
 		}
 	}
 	
-	public boolean isUseValuesField() {
-		return useValuesField;
-	}
 	public ExtractedArgument getArgument() {
 		return argument;
 	}
@@ -147,8 +143,8 @@ public class ExtractedValues implements ExceptionMessages {
 	}
 	
 	private static void preConditionExtractValues(final ArgumentValues argumentValues, final ExtractedArgument extractedArgument, final Class<?> valueType, final int modifiers, final String element) {
-		if (argumentValues.values() == null || argumentValues.values().length == 0) {
-			throw new ArgumentException(EXC_EXTRACTOR_NO_VALUES_ALLOWED, extractedArgument.getArgumentName());
+		if (argumentValues.values() != null && argumentValues.values().length > 0) {
+			throw new ArgumentException(EXC_EXTRACTOR_NO_VALUES_ALLOWED, element, extractedArgument.getArgumentName());
 		}
 		if (argumentValues.name() == null || argumentValues.name().isEmpty()) {
 			throw new ArgumentException(EXC_EXTRACTOR_VALUES_NEED_NAME, element);

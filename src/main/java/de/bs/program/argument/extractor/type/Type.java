@@ -20,9 +20,6 @@ public abstract class Type implements ExceptionMessages {
 		this.extractedArgument = extractedArgument;
 	}
 	
-	public void setExtractedArgument(final ExtractedArgument extractedArgument) {
-		this.extractedArgument = extractedArgument;
-	}
 	public ExtractedArgument getExtractedArgument() {
 		return extractedArgument;
 	}
@@ -38,16 +35,16 @@ public abstract class Type implements ExceptionMessages {
 	
 	public static Type getTypeProcessor(final Class<?> type, final ExtractedArgument extractedArgument) {
 		if (type == Void.class && extractedArgument.getClass() == HelpArgument.class) {
-			return new VoidType(type, extractedArgument);
+			return new VoidType(extractedArgument);
 		}
 		if ((type == void.class || type == Void.class)) {
 			throw new ArgumentException(EXC_TYPE_NOT_SUPPORTED, type);
 		}
 		if (type == Boolean.class || type == boolean.class) {
-			return new BooleanType(Boolean.class, extractedArgument);
+			return new BooleanType(extractedArgument);
 		}
 		if (type == String.class) {
-			return new StringType(String.class, extractedArgument);
+			return new StringType(extractedArgument);
 		}
 		if (Collection.class.isAssignableFrom(type)) {
 			return new CollectionType(type, extractedArgument);
@@ -62,5 +59,5 @@ public abstract class Type implements ExceptionMessages {
 	}
 	public abstract void getUsageDescription(final StringBuilder descriptionBuilder);
 	public abstract boolean isAssignable(final Object value);
-	public abstract Object processArgs(final String option, final String argPart, final Arguments args);
+	public abstract Object processArgs(final String argumentName, final String argumentValue, final Arguments args);
 }

@@ -97,7 +97,7 @@ public class InfoExtractor {
 		}
 	}
 
-	@Argument(name = "types", description = "List of type that should be shown if the option " + SHOW_TYPE_INFO
+	@Argument(name = "types", description = "List of type that should be shown if the argument " + SHOW_TYPE_INFO
 			+ " is active.", sourceType=String.class)
 	private void setTypes(final Set<String> types) {
 		allowTypes = new HashSet<Integer>();

@@ -45,12 +45,11 @@ public class CollectionType extends Type {
 	}
 
 	@Override
-	public Object processArgs(String option, String argPart, Arguments args) {
-		String data = argPart.substring(option.length());
+	public Object processArgs(String argumentName, String argumentValue, Arguments args) {
 		if (getExtractedValues() == null) {
-			throw new ArgumentException(EXC_TYPE_MISSING_VALUES, option);
+			throw new ArgumentException(EXC_TYPE_MISSING_VALUES, argumentName);
 		}
-		String[] argValues = data.split(getExtractedValues().getDelimiter());
+		String[] argValues = argumentValue.split(getExtractedValues().getDelimiter());
 		
 		if (getExtractedValues() != null && !getExtractedValues().validValues(argValues)) {
 			throw new ArgumentException(EXC_TYPE_INVALID_VALUE, listToString(argValues), getExtractedArgument().getArgumentName());

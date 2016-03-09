@@ -7,8 +7,8 @@ import de.bs.program.argument.process.Arguments;
  * For internal use only
  */
 public class VoidType extends Type {
-	public VoidType(Class<?> targetType, ExtractedArgument extractedArgument) {
-		super(targetType, extractedArgument);
+	public VoidType(final ExtractedArgument extractedArgument) {
+		super(Void.class, extractedArgument);
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class VoidType extends Type {
 	}
 
 	@Override
-	public Object processArgs(String option, String argPart, Arguments args) {
+	public Object processArgs(String argumentName, String argumentValue, Arguments args) {
 		return null;
 	}
 

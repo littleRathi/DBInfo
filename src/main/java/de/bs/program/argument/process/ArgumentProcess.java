@@ -30,13 +30,14 @@ public class ArgumentProcess implements ExceptionMessages {
 	
 	private boolean mapArgsToOption(final Object program) {
 		while (arguments.next()) {
-			String argPart = arguments.get();
-			String option = getOption(argPart);
+			String argument = arguments.get();
+			String argumentName = getOption(argument);
+			String argumentValue = (argument.length() > argumentName.length()) ? argument.substring(argumentName.length() + 1) : "";
 			
-			ExtractedArgument op = argExtractor.getExtractedArgumentForForArg(option);
+			ExtractedArgument op = argExtractor.getExtractedArgumentForForArg(argumentName);
 			if (op != null) {
-				op.prozessArg(program, option, argPart, arguments);
-				required.remove(option);
+				op.prozessArg(program, argumentName, argumentValue, arguments);
+				required.remove(argumentName);
 			}
 		}
 		return true;
@@ -44,7 +45,7 @@ public class ArgumentProcess implements ExceptionMessages {
 	
 	private String getOption(final String argPart) {
 		String[] split = argPart.split(":");
-		return split[0] + ":";
+		return split[0];
 	}
 	
 	private void checkForRequired() {

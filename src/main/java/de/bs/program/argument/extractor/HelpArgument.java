@@ -42,7 +42,7 @@ public class HelpArgument extends ExtractedArgument {
 	}
 
 	@Override
-	public void prozessArg(Object program, String argOption, String argPart, Arguments args) {
+	public void prozessArg(Object program, String argumentName, String argumentValue, Arguments args) {
 		System.out.println(de.bs.program.argument.Arguments.getHelpDescription(program.getClass()));
 		System.exit(0);
 	}

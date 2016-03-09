@@ -5,8 +5,8 @@ import de.bs.program.argument.extractor.ExtractedArgument;
 import de.bs.program.argument.process.Arguments;
 
 public class StringType extends Type {
-	public StringType(final Class<?> targetType, final ExtractedArgument extractedArgument) {
-		super(targetType, extractedArgument);
+	public StringType(final ExtractedArgument extractedArgument) {
+		super(String.class, extractedArgument);
 	}
 	
 	@Override
@@ -20,11 +20,10 @@ public class StringType extends Type {
 	}
 	
 	@Override
-	public Object processArgs(final String option, final String argPart, final Arguments args) {
-		String result = argPart.substring(option.length());
-		if (getExtractedValues() != null && !getExtractedValues().validValue(result)) {
-			throw new ArgumentException(EXC_TYPE_VALUE_NOT_VALID, result, getExtractedArgument().getArgumentName());
+	public Object processArgs(final String argumentName, final String argumentValue, final Arguments args) {
+		if (getExtractedValues() != null && !getExtractedValues().validValue(argumentValue)) {
+			throw new ArgumentException(EXC_TYPE_VALUE_NOT_VALID, argumentValue, getExtractedArgument().getArgumentName());
 		}
-		return result;
+		return argumentValue;
 	}
 }

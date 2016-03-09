@@ -25,8 +25,8 @@ public class ObjectType extends Type {
 	}
 	
 	@Override
-	public Object processArgs(String option, String argPart, Arguments args) {
-		String className = argPart.substring(option.length());
+	public Object processArgs(String argumentName, String argumentValue, Arguments args) {
+		String className = argumentValue;
 		
 		if (getExtractedValues() != null && !getExtractedValues().validValue(className)) {
 			throw new ArgumentException(EXC_TYPE_VALUE_NOT_VALID, className, getExtractedArgument().getArgumentName());

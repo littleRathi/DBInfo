@@ -89,7 +89,7 @@ public class ArgumentExtractor implements ExceptionMessages {
 		}
 		
 		String argName = (argument == null ? values.name() : argument.name());
-		ExtractedArgument extractedArgument = argToExtractedArgument.get("-" + argName + ":");
+		ExtractedArgument extractedArgument = argToExtractedArgument.get("-" + argName);
 		
 		if (extractedArgument == null) {
 			throw new ArgumentException(EXC_EXTRACTOR_ARGUMENT_VALUES_MISSING_ARGUMENT, argName);

@@ -26,13 +26,13 @@ public class ExtractedArgumentField extends ExtractedArgument {
 	}
 
 	@Override
-	public void prozessArg(final Object program, final String argOption, final String argPart, final Arguments args) {
+	public void prozessArg(final Object program, final String argumentName, final String argumentValue, final Arguments args) {
 		Object value = null;
 		try {
-			value = getType().processArgs(argOption, argPart, args);
+			value = getType().processArgs(argumentName, argumentValue, args);
 			field.set(program, value);
 		} catch (Exception e) {
-			throw new ArgumentException(e, EXC_EXTRACTOR_COULD_NOT_SET, value, argOption);
+			throw new ArgumentException(e, EXC_EXTRACTOR_COULD_NOT_SET, value, argumentName);
 		}
 	}
 }

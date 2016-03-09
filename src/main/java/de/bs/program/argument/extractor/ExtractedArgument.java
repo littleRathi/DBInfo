@@ -22,7 +22,7 @@ public abstract class ExtractedArgument implements ExceptionMessages {
 		
 		this.argument = argument;
 		this.elName = this.argument.name().toUpperCase();
-		this.argumentName = "-" + this.argument.name() + ":";
+		this.argumentName = "-" + this.argument.name();
 	}
 	
 	@Override
@@ -91,5 +91,5 @@ public abstract class ExtractedArgument implements ExceptionMessages {
 		return type;
 	}
 	
-	public abstract void prozessArg(final Object program, final String argOption, final String argPart, final Arguments args);
+	public abstract void prozessArg(final Object program, final String argumentName, final String argumentValue, final Arguments args);
 }
