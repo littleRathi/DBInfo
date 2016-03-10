@@ -14,15 +14,16 @@ import java.sql.Types;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.bs.cli.jpar.Option;
+import de.bs.cli.jpar.Values;
+import de.bs.cli.jpar.CliProgram;
+import de.bs.cli.jpar.Arguments;
+import de.bs.cli.jpar.JPar;
 import de.bs.dbinfo.exporter.DataBlock;
 import de.bs.dbinfo.exporter.Exporter;
 import de.bs.dbinfo.exporter.console.ConsoleExporter;
-import de.bs.program.argument.Argument;
-import de.bs.program.argument.Arguments;
-import de.bs.program.argument.ArgumentProgram;
-import de.bs.program.argument.ArgumentValues;
 
-@ArgumentProgram(name = "DB Info Extractor", description = "This Programm extract (meta)data from a connection to a databse using JDBC. "
+@CliProgram(name = "DB Info Extractor", description = "This Programm extract (meta)data from a connection to a databse using JDBC. "
 		+ " To etablish a connection, the JDBC driver is needed, also with the required in classpath and the "
 		+ " options ${*.required} (see option description for more information on these options). "
 		+ " Here is a generated list: ")
@@ -46,38 +47,38 @@ public class InfoExtractor {
 //	private static final String ALLOW_TYPES = "types";
 //	private static final String SHOW_META_DATA_INFO = "mataData";
 
-	@Argument(name = "url", description = "The connection url for the database.", required = true)
+	@Option(name = "url", description = "The connection url for the database.", required = true)
 	private String url;
-	@Argument(name = "user", description = "The user for the database.", required = true)
+	@Option(name = "user", description = "The user for the database.", required = true)
 	private String user;
-	@Argument(name = "pw", description = "The password for the given user for the database connection.", required = true)
+	@Option(name = "pw", description = "The password for the given user for the database connection.", required = true)
 	private String pw;
 //	private int sufficientData = 0;
 
-	@Argument(name = "metaData", description = "Enable or Disable the info category for mataData. Enable this, to see categories.")
+	@Option(name = "metaData", description = "Enable or Disable the info category for mataData. Enable this, to see categories.")
 	private boolean showMetaDataInfo = true;
-	@Argument(name = "typeInfo", description = "Enable or Disable the info category for typeInfo. Enable this, to see type infos.")
+	@Option(name = "typeInfo", description = "Enable or Disable the info category for typeInfo. Enable this, to see type infos.")
 	private boolean showTypeInfo = true;
-	@Argument(name = "maxValues", description = "Enable or Disable the info category for maxValues. Enable this, to see all max values.")
+	@Option(name = "maxValues", description = "Enable or Disable the info category for maxValues. Enable this, to see all max values.")
 	private boolean showMaxValues = true;
-	@Argument(name = "supportValues", description = "Enable or Disable the info category for supportValues. Enable this, to see support values.")
+	@Option(name = "supportValues", description = "Enable or Disable the info category for supportValues. Enable this, to see support values.")
 	private boolean showSupportValues = true;
-	@Argument(name = "connectionInfo", description = "Enable or Disable the info category for connectionInfo. Enable this, to see connection informations.")
+	@Option(name = "connectionInfo", description = "Enable or Disable the info category for connectionInfo. Enable this, to see connection informations.")
 	private boolean showConnectionInfo = true;
-	@Argument(name = "catalogs", description = "Enable or Disable the info category for catalogs. Enable this, to see catalogs.")
+	@Option(name = "catalogs", description = "Enable or Disable the info category for catalogs. Enable this, to see catalogs.")
 	private boolean showCatalogs = true;
-	@Argument(name = "schemas", description = "Enable or Disable the info category for schemas. Enable this, to see schemas.")
+	@Option(name = "schemas", description = "Enable or Disable the info category for schemas. Enable this, to see schemas.")
 	private boolean showSchemas = true;
-	@Argument(name = "tables", description = "Enable or Disable the info category for tables. Enable this, to see all tables.")
+	@Option(name = "tables", description = "Enable or Disable the info category for tables. Enable this, to see all tables.")
 	private boolean showTables = true;
 
-	@Argument(name = "exporter", description = "Class of the exporter that have to be used, default is de.bs.dbinfo.exporter.console.ConsoleExporter.",
+	@Option(name = "exporter", description = "Class of the exporter that have to be used, default is de.bs.dbinfo.exporter.console.ConsoleExporter.",
 			sourceType = Class.class)
 	private Exporter useExporter = new ConsoleExporter();
 
 	private Set<Integer> allowTypes = null;
 
-	@Argument(name = "all", description = "Enable or Disable all info categories (following options: ${SHOW*}) for "
+	@Option(name = "all", description = "Enable or Disable all info categories (following options: ${SHOW*}) for "
 			+ "showing information, see other options for all info categories.")
 	private void setAll(final boolean allValue) {
 		Class<?> ieClass = InfoExtractor.class;
@@ -97,7 +98,7 @@ public class InfoExtractor {
 		}
 	}
 
-	@Argument(name = "types", description = "List of type that should be shown if the argument " + SHOW_TYPE_INFO
+	@Option(name = "types", description = "List of type that should be shown if the argument " + SHOW_TYPE_INFO
 			+ " is active.", sourceType=String.class)
 	private void setTypes(final Set<String> types) {
 		allowTypes = new HashSet<Integer>();
@@ -116,11 +117,11 @@ public class InfoExtractor {
 		}
 	}
 	
-	@ArgumentValues(name = "types", delimiter=";")
+	@Arguments(name = "types", delimiter=";")
 	private static String[][] getTypeValues() {
-		return Arguments.createGroups(
-				Arguments.createSimpleValueList(Types.class), 
-				Arguments.createSimpleValueList("simple")
+		return Values.createGroups(
+				Values.createSimpleValueList(Types.class), 
+				Values.createSimpleValueList("simple")
 		);
 	}
 
@@ -132,7 +133,7 @@ public class InfoExtractor {
 	}
 
 	public InfoExtractor(final String[] args) {
-		Arguments.processArguments(this, args);
+		JPar.process(this, args);
 	}
 
 	public void run(final Exporter exporter) {
