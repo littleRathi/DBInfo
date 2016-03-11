@@ -82,10 +82,10 @@ public abstract class ExtractedOption implements ExceptionMessages {
 	}
 
 	public String getDelimiter() {
-		return type.getExtractedValues() != null ? type.getExtractedValues().getDelimiter() : null;
+		return type.getValues() != null ? type.getValues().getDelimiter() : null;
 	}
 	public String[][] getValues() {
-		return type.getExtractedValues() != null ? type.getExtractedValues().getValues() : null;
+		return type.getValues() != null ? type.getValues().getValues() : null;
 	}
 	public Type getType() {
 		return type;

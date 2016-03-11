@@ -179,7 +179,7 @@ public class ExtractedValues implements ExceptionMessages {
 	
 	private static ExtractedValues createExtractedValues(final String[][] values, final Arguments arguments, final ExtractedOption option) {
 		ExtractedValues extractedValues = new ExtractedValues(values, arguments, option);
-		option.getType().setExtractedValues(extractedValues);
+		option.getType().setValues(extractedValues);
 		return extractedValues;
 	}
 }

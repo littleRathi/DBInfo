@@ -11,10 +11,13 @@ public interface ExceptionMessages {
 	String EXC_TYPE_OBJECT_NOT_INSTANTIABLE = "The class '%s' could not be instanced for argument '%s'.";
 	String EXC_TYPE_NOT_SUPPORTED = "The type '%s' is not supported."; // will not
 	String EXC_TYPE_UNSUPPORTED = "The type '%s' is not supported yet."; // perhaps some day. No duplicate to EXC_TYPE_NOT_SUPPORTED
-	String EXC_TYPE_MISSING_VALUES = "The argument '%s' needs also a element with the '@" + Arguments.class + "' annotation, to specify the behaviour.";
+	String EXC_TYPE_MISSING_VALUES = "The argument '%s' needs also a element with the '@" + Arguments.class + "' annotation, to specify some behaviours (required is property delimiter()).";
 	String EXC_TYPE_UNKNOWN_COLLECTION_TYPE = "The type '%s' is unkown or not implemented yet.";
 	String EXC_TYPE_NEEDED_CONSTRUCTOR = "The type '%s' has no constructor with <init>(String).";
-	String EXC_TYPE_INTERNAL = "Internal exception by processing the value '%s' to the new type '%s'.";
+	String EXC_TYPE_COLLECTION_UNSUPPORTED_GEN_TYPE = "The set type '%s' for property sourceType() in '" + Option.class + "' with option name '%s' is not support (need a static valueOf(String) method or constructor with 1 parameter from type String.";
+	String EXC_TYPE_COLLECTION_NOT_INSTANCIABLE = "From the collection type '%s' for parameter '%s' could not be instanziated.";
+	String EXC_TYPE_GENERIC_TYPE_COLLECTION = "The property sourceType() from '" + Option.class + "' for the parameter '%s' is a collection type (class: is '%s')";
+	//TODO	String EXC_TYPE_INTERNAL = "Internal exception by processing the value '%s' to the new type '%s'.";
 
 	String EXC_EXTRACTOR_DOUBLE_ARGUMENT = "There is already a argument with the name '-%s:'.";
 	String EXC_EXTRACTOR_SEVERAL_ARGUMENT_PROGRAM = "The class '%s' contains serveral '@" + CliProgram.class + "' Annotations, but only one is allowed.";

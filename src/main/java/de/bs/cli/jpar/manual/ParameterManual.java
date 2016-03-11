@@ -58,7 +58,7 @@ public class ParameterManual {
 			}
 			
 			sbOption.append(option.getManuelDescription()).append(" Usage: ");
-			option.getType().getUsageDescription(sbOption);
+			option.getType().getManualDescription(sbOption);
 			
 			String optionText = el.replaceReferencesIn(sbOption.toString());
 			

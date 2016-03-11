@@ -10,11 +10,11 @@ public class ObjectType extends Type {
 	}
 	
 	@Override
-	public void getUsageDescription(final StringBuilder descriptionBuilder) {
+	public void getManualDescription(final StringBuilder descriptionBuilder) {
 		String extendVariant = getTargetType().isInterface() ? "implements" : "extends";
 		String type = getTargetType().isInterface() ? "Interface" : "Class";
 		
-		descriptionBuilder.append(getExtractedArgument().getOptionName()).append("<class> where given class has to ").append(extendVariant).append(" ")
+		descriptionBuilder.append(getOption().getOptionName()).append("<class> where given class has to ").append(extendVariant).append(" ")
 			.append(getTargetType().getName()).append(" ").append(type)
 			.append(" and need a constructor without parameters (Default constructor).");
 	}
@@ -28,8 +28,8 @@ public class ObjectType extends Type {
 	public Object processArgs(String argumentName, String argumentValue, Parameters args) {
 		String className = argumentValue;
 		
-		if (getExtractedValues() != null && !getExtractedValues().validValue(className)) {
-			throw new JParException(EXC_TYPE_VALUE_NOT_VALID, className, getExtractedArgument().getOptionName());
+		if (getValues() != null && !getValues().validValue(className)) {
+			throw new JParException(EXC_TYPE_VALUE_NOT_VALID, className, getOption().getOptionName());
 		}
 		
 		if (className != null && !className.isEmpty()) {
@@ -42,7 +42,7 @@ public class ObjectType extends Type {
 					throw new JParException(EXC_TYPE_OBJECT_NOT_INSTANCE, className, getTargetType());
 				}
 			} catch (Exception e) {
-				throw new JParException(EXC_TYPE_OBJECT_NOT_INSTANTIABLE, className, getExtractedArgument().getOptionName());
+				throw new JParException(EXC_TYPE_OBJECT_NOT_INSTANTIABLE, className, getOption().getOptionName());
 			}
 		}
 		return null;

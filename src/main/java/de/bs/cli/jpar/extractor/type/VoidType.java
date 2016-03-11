@@ -12,8 +12,8 @@ public class VoidType extends Type {
 	}
 
 	@Override
-	public void getUsageDescription(StringBuilder descriptionBuilder) {
-		descriptionBuilder.append(getExtractedArgument().getOptionName()).append(" to show this help information.");
+	public void getManualDescription(StringBuilder descriptionBuilder) {
+		descriptionBuilder.append(getOption().getOptionName()).append(" to show this help information.");
 	}
 
 	@Override

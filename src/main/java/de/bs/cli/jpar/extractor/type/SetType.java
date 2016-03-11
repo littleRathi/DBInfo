@@ -15,8 +15,8 @@ public class SetType extends Type {
 	}
 	
 	@Override
-	public void getUsageDescription(final StringBuilder descriptionBuilder) {
-		ExtractedOption ap = getExtractedArgument();
+	public void getManualDescription(final StringBuilder descriptionBuilder) {
+		ExtractedOption ap = getOption();
 		Class<?> listType = ap.getSourceType();
 		if (ap.getDelimiter() == null || ap.getDelimiter().isEmpty()) {
 			throw new JParException(EXC_TYPE_MISSING_DELEMITER, ap.getOptionName(), ap.getDelimiter());
@@ -42,13 +42,13 @@ public class SetType extends Type {
 	@Override
 	public Object processArgs(String option, String argPart, Parameters args) {
 		String data = argPart.substring(option.length());
-		if (getExtractedValues() == null) {
-			throw new JParException(EXC_TYPE_MISSING_VALUES, option);
-		}
-		String[] argValues = data.split(getExtractedValues().getDelimiter());
+//		if (getValues() == null) {
+//			throw new JParException(EXC_TYPE_MISSING_VALUES, option);
+//		}
+		String[] argValues = data.split(getValues().getDelimiter());
 		
-		if (getExtractedValues() != null && !getExtractedValues().validValues(argValues)) {
-			throw new JParException(EXC_TYPE_INVALID_VALUE, argValues, getExtractedArgument().getOptionName());
+		if (getValues() != null && !getValues().validValues(argValues)) {
+			throw new JParException(EXC_TYPE_INVALID_VALUE, argValues, getOption().getOptionName());
 		}
 
 		Set<String> newSet = new HashSet<String>();

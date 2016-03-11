@@ -1,74 +1,82 @@
 package de.bs.cli.jpar.extractor.type;
 
-import static org.mockito.Mockito.*;
-
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-
-import static org.hamcrest.core.StringContains.containsString;
 import static de.bs.cli.jpar.extractor.type.BooleanType.FALSE;
 import static de.bs.cli.jpar.extractor.type.BooleanType.TRUE;
-import static org.hamcrest.CoreMatchers.*;
+import static de.bs.cli.jpar.extractor.type.BooleanType.TRUE_IMPLIZIT;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.core.StringContains.containsString;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import de.bs.cli.jpar.JParException;
-import de.bs.cli.jpar.Arguments;
 import de.bs.cli.jpar.extractor.ExtractedOption;
 import de.bs.cli.jpar.extractor.ExtractedValues;
-import de.bs.cli.jpar.extractor.type.BooleanType;
 import de.bs.cli.jpar.process.Parameters;
 
 public class BooleanTypeTest {
 	private BooleanType testee;
 	
-	private ExtractedOption extractedArgument;
+	private ExtractedOption option;
 	
 	private static final String EXTRACTED_ARGUMENT_ARG_NAME = "-test:";
 	private static final String WRONG_VALUE = "abc";
 	
 	private ExtractedValues mockExtractedValues() {
-		String[][] values = new String[][]{{"first"}};
+		ExtractedValues values = mock(ExtractedValues.class);
+		when(values.getDelimiter()).thenReturn(";");
 		
-		ExtractedValues extractedValues = mock(ExtractedValues.class);
-		when(extractedValues.getDelimiter()).thenReturn(";");
-		
-		return extractedValues;
+		return values;
 	}
 	
-	private ExtractedOption mockExtractedArgument() {
-		extractedArgument = mock(ExtractedOption.class);
-		when(extractedArgument.getOptionName()).thenReturn(EXTRACTED_ARGUMENT_ARG_NAME);
-		return extractedArgument;
+	private ExtractedOption mockExtractedOption() {
+		option = mock(ExtractedOption.class);
+		when(option.getOptionName()).thenReturn(EXTRACTED_ARGUMENT_ARG_NAME);
+		when(option.getManuelDescription()).thenReturn("Some meaningless text");
+		return option;
 	}
 	
 	@Before
 	public void setupTest() {
-		testee = new BooleanType(mockExtractedArgument());
+		testee = new BooleanType(mockExtractedOption());
 	}
 	
 	// testcases:Type (superclass)
 	@Test
-	public void testGetExtractedArgument() {
-		ExtractedOption returned = testee.getExtractedArgument();
+	public void testGetOption() {
+		ExtractedOption returned = testee.getOption();
 		
-		assertThat(returned, equalTo(extractedArgument));
+		assertThat(returned, equalTo(option));
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testGetTargetType() {
-		@SuppressWarnings("unchecked") // TODO: seems strange
-		Class<Boolean> returned = (Class<Boolean>)testee.getTargetType();
+		Class returned = (Class)testee.getTargetType();
 		
-		assertThat(returned, equalTo(Boolean.class));
+		assertThat(returned, equalTo((Class)Boolean.class));
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test(expected=JParException.class)
+	public void testWithSourceType() {
+		option = mockExtractedOption();
+		when(option.getSourceType()).thenReturn((Class)String.class);
+		
+		testee = new BooleanType(option);
+		
+		fail();
 	}
 	
 	// testcases:BooleanType
 	@Test
 	public void testUsageDescription() {
 		StringBuilder sb = new StringBuilder();
-		testee.getUsageDescription(sb);
+		testee.getManualDescription(sb);
 		String description = sb.toString();
 		
 		assertThat(description, containsString(EXTRACTED_ARGUMENT_ARG_NAME));
@@ -104,8 +112,17 @@ public class BooleanTypeTest {
 	@Test
 	public void testProcessArgsWithTrue() {
 		String[] args = new String[]{EXTRACTED_ARGUMENT_ARG_NAME + TRUE};
-		Parameters arguments = new Parameters(args);
-		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, TRUE, arguments);
+		Parameters parameters = new Parameters(args);
+		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, TRUE, parameters);
+		
+		assertThat(result, equalTo((Object)Boolean.TRUE));
+	}
+	
+	@Test
+	public void testProcessArgsEmpty() {
+		String[] args = new String[]{EXTRACTED_ARGUMENT_ARG_NAME + TRUE_IMPLIZIT};
+		Parameters parameters = new Parameters(args);
+		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, TRUE_IMPLIZIT, parameters);
 		
 		assertThat(result, equalTo((Object)Boolean.TRUE));
 	}
@@ -113,8 +130,8 @@ public class BooleanTypeTest {
 	@Test
 	public void testProcessArgsWithFalse() {
 		String[] args = new String[]{EXTRACTED_ARGUMENT_ARG_NAME + FALSE};
-		Parameters arguments = new Parameters(args);
-		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, FALSE, arguments);
+		Parameters parameters = new Parameters(args);
+		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, FALSE, parameters);
 		
 		assertThat(result, equalTo((Object)Boolean.FALSE));
 	}
@@ -122,19 +139,19 @@ public class BooleanTypeTest {
 	@Test(expected=JParException.class)
 	public void testProcessArgsWithAnyString() {
 		String[] args = new String[]{EXTRACTED_ARGUMENT_ARG_NAME + WRONG_VALUE};
-		Parameters arguments = new Parameters(args);
-		testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, args[0], arguments);
+		Parameters parameters= new Parameters(args);
+		testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, args[0], parameters);
 		
 		fail();
 	}
 	
 	@Test(expected=JParException.class)
 	public void testProcessArgsWithAnythingButArgValues() {
-		testee.setExtractedValues(mockExtractedValues());
+		testee.setValues(mockExtractedValues());
 		
 		String[] args = new String[]{EXTRACTED_ARGUMENT_ARG_NAME + FALSE};
-		Parameters arguments = new Parameters(args);
-		testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, args[0], arguments);
+		Parameters parameters = new Parameters(args);
+		testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, args[0], parameters);
 		
 		fail();
 	}

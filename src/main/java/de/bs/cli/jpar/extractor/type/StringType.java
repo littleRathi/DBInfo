@@ -10,8 +10,8 @@ public class StringType extends Type {
 	}
 	
 	@Override
-	public void getUsageDescription(final StringBuilder descriptionBuilder) {
-		descriptionBuilder.append(getExtractedArgument().getOptionName()).append("<STRING>").toString();
+	public void getManualDescription(final StringBuilder descriptionBuilder) {
+		descriptionBuilder.append(getOption().getOptionName()).append("<STRING>").toString();
 	}
 	
 	@Override
@@ -21,8 +21,8 @@ public class StringType extends Type {
 	
 	@Override
 	public Object processArgs(final String argumentName, final String argumentValue, final Parameters args) {
-		if (getExtractedValues() != null && !getExtractedValues().validValue(argumentValue)) {
-			throw new JParException(EXC_TYPE_VALUE_NOT_VALID, argumentValue, getExtractedArgument().getOptionName());
+		if (getValues() != null && !getValues().validValue(argumentValue)) {
+			throw new JParException(EXC_TYPE_VALUE_NOT_VALID, argumentValue, getOption().getOptionName());
 		}
 		return argumentValue;
 	}
