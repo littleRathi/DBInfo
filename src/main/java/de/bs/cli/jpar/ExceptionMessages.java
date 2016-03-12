@@ -17,7 +17,6 @@ public interface ExceptionMessages {
 	String EXC_TYPE_COLLECTION_UNSUPPORTED_GEN_TYPE = "The set type '%s' for property sourceType() in '" + Option.class + "' with option name '%s' is not support (need a static valueOf(String) method or constructor with 1 parameter from type String.";
 	String EXC_TYPE_COLLECTION_NOT_INSTANCIABLE = "From the collection type '%s' for parameter '%s' could not be instanziated.";
 	String EXC_TYPE_GENERIC_TYPE_COLLECTION = "The property sourceType() from '" + Option.class + "' for the parameter '%s' is a collection type (class: is '%s')";
-	//TODO	String EXC_TYPE_INTERNAL = "Internal exception by processing the value '%s' to the new type '%s'.";
 
 	String EXC_EXTRACTOR_DOUBLE_ARGUMENT = "There is already a argument with the name '-%s:'.";
 	String EXC_EXTRACTOR_SEVERAL_ARGUMENT_PROGRAM = "The class '%s' contains serveral '@" + CliProgram.class + "' Annotations, but only one is allowed.";

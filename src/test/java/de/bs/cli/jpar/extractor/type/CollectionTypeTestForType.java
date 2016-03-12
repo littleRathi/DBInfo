@@ -1,23 +1,17 @@
 package de.bs.cli.jpar.extractor.type;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.core.StringContains.containsString;
-
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.isNotNull;
 
-import java.awt.List;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -29,6 +23,7 @@ import de.bs.cli.jpar.extractor.ExtractedOption;
 public class CollectionTypeTestForType {
 	private CollectionType testee;
 	
+	@SuppressWarnings("unused")
 	private ExtractedOption option;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

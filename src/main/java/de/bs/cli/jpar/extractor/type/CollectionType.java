@@ -1,15 +1,13 @@
 package de.bs.cli.jpar.extractor.type;
 
-import java.awt.List;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
+import java.util.List;
 import java.util.Set;
 
 import de.bs.cli.jpar.JParException;
@@ -56,7 +54,7 @@ public class CollectionType extends Type {
 	@Override
 	public Object processArgs(String argumentName, String argumentValue, Parameters args) {
 		if (getValues() == null) {
-			throw new JParException(EXC_TYPE_MISSING_VALUES, getOption().getOptionName()); // TODO make only delimiter required
+			throw new JParException(EXC_TYPE_MISSING_VALUES, getOption().getOptionName());
 		}
 		String[] argValues = argumentValue.split(getValues().getDelimiter());
 		
@@ -72,16 +70,6 @@ public class CollectionType extends Type {
 		
 		return collection;
 	}
-	
-//	private String listToString(final String[] values) {
-//		if (values != null && values.length > 0) {
-//			StringBuilder sb = new StringBuilder(values[0]);
-//			for (int i = 1; i < values.length; i++) {
-//				sb.append(", ").append(values[i]);
-//			}
-//		}
-//		return "";
-//	}
 	
 	private void checkGenericType(final Class<?> type) {
 		Method valueOf = null;
@@ -134,7 +122,6 @@ public class CollectionType extends Type {
 			return con.newInstance(value);
 		} catch (NoSuchMethodException e) {
 		} catch (Exception e) {
-//TODO			throw new JParException(e,EXC_TYPE_INTERNAL, value, newType.toString());
 		}
 		return null;
 	}
@@ -157,26 +144,13 @@ public class CollectionType extends Type {
 	
 	@SuppressWarnings("unchecked")
 	private Collection<Object> getCollectionObject(final Class<?> collectionType) {
-//		if (HashSet.class.equals(collectionType)) {
-//			return new HashSet<Object>();
-//		}
 		if (Set.class.equals(collectionType)) {
 			return new HashSet<Object>();
 		}
 		
-//		if (ArrayList.class.equals(collectionType)) {
-//			return new ArrayList<Object>();
-//		} 
-//		if (LinkedList.class.equals(collectionType)) {
-//			return new LinkedList<Object>();
-//		}
 		if (List.class.equals(collectionType)) {
 			return new LinkedList<Object>();
 		}
-		
-//		if (PriorityQueue.class.equals(collectionType)) {
-//			return new PriorityQueue<Object>();
-//		}
 		
 		if (Collection.class.equals(collectionType)) {
 			return new HashSet<Object>();
@@ -191,9 +165,6 @@ public class CollectionType extends Type {
 				throw new JParException(EXC_TYPE_COLLECTION_NOT_INSTANCIABLE, collectionType, getOption().getOptionName());
 			}
 		}
-//		if (Queue.class.equals(collectionType)) {
-//			return null
-//		}
 		throw new JParException(EXC_TYPE_UNKNOWN_COLLECTION_TYPE, collectionType);
 	}
 
