@@ -11,21 +11,26 @@ import java.util.List;
 import java.util.Set;
 
 import de.bs.cli.jpar.JParException;
+import de.bs.cli.jpar.extractor.ExtractedArguments;
 import de.bs.cli.jpar.extractor.ExtractedOption;
 import de.bs.cli.jpar.process.Parameters;
 
 public class CollectionType extends Type {
-	public CollectionType(Class<?> targetType, ExtractedOption option) {
-		super(targetType, option);
+	public CollectionType(final Class<?> targetType, final ExtractedOption option, final ExtractedArguments arguments) {
+		super(targetType, option, arguments);
 		Class<?> genericType = option.getSourceType();
-		if (option.getDelimiter() == null || option.getDelimiter().isEmpty()) {
-			throw new JParException(EXC_TYPE_MISSING_DELEMITER, option.getOptionName(), option.getDelimiter());
-		}
 //		Needed, because, the generic type of Set gets erased (so this information is missing)
 		if (genericType == null || genericType == Void.class || genericType == void.class) {
 			throw new JParException(EXC_TYPE_MISSING_SOURCE_TYPE, option.getOptionName(), genericType);
 		}
-		if (option.getValues() != null && option.getValues().length > 0) {
+		
+		if (arguments == null) {
+			throw new JParException(EXC_TYPE_MISSING_VALUES, getOption().getOptionName());
+		}
+		if (arguments.getDelimiter() == null || arguments.getDelimiter().isEmpty()) {
+			throw new JParException(EXC_TYPE_MISSING_DELEMITER, option.getOptionName(), arguments.getDelimiter());
+		}
+		if (arguments.getValues() != null && arguments.getValues().length > 0) {
 			genericType = String.class;
 		}
 		
@@ -37,29 +42,17 @@ public class CollectionType extends Type {
 	public void getManualDescription(final StringBuilder descriptionBuilder) {
 		ExtractedOption option = getOption();
 		Class<?> listType = option.getSourceType();
-		descriptionBuilder.append(getOption().getOptionName()).append("<").append(listType.getSimpleName()).append(">[").append(option.getDelimiter()).append("<").append(listType.getSimpleName()).append(">]");
+		descriptionBuilder.append(getOption().getOptionName()).append("<").append(listType.getSimpleName()).append(">[").append(getArguments().getDelimiter()).append("<").append(listType.getSimpleName()).append(">]");
 		
 		createWithSpecific(option, descriptionBuilder, true);
 	}
 
 	@Override
-	public boolean isAssignable(Object value) {
-		if (value == null) {
-			return false;
-		} else {
-			return getTargetType().isAssignableFrom(value.getClass());
-		}
-	}
-
-	@Override
-	public Object processArgs(String argumentName, String argumentValue, Parameters args) {
-		if (getValues() == null) {
-			throw new JParException(EXC_TYPE_MISSING_VALUES, getOption().getOptionName());
-		}
-		String[] argValues = argumentValue.split(getValues().getDelimiter());
+	public Object processArgs(String option, String argument, Parameters args) {
+		String[] argValues = argument.split(getArguments().getDelimiter());
 		
-		if (getValues() != null && !getValues().validValues(argValues)) {
-			throw new JParException(EXC_TYPE_INVALID_VALUE, argumentValue, getOption().getOptionName());
+		if (getArguments() != null && !getArguments().validValues(argValues)) {
+			throw new JParException(EXC_TYPE_INVALID_VALUE, argument, getOption().getOptionName());
 		}
 		
 		Class<?> sourceType = getOption().getSourceType();
@@ -98,6 +91,7 @@ public class CollectionType extends Type {
 		}
 	}
 	
+	// TODO move to Type?
 	private static Object castTo(final Class<?> newType, final String value) {
 		if (String.class.equals(newType)) {
 			return value;
@@ -168,8 +162,8 @@ public class CollectionType extends Type {
 		throw new JParException(EXC_TYPE_UNKNOWN_COLLECTION_TYPE, collectionType);
 	}
 
-	private static void createWithSpecific(final ExtractedOption ap, final StringBuilder result, final boolean multiple) {
-		String[][] values = ap.getValues();
+	private void createWithSpecific(final ExtractedOption option, final StringBuilder result, final boolean multiple) {
+		String[][] values = getArguments().getValues();
 		if (values != null) {
 			result.append(". Following values can be used: ");
 			for (int i = 0; i < values.length; i++) {

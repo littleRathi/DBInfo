@@ -17,13 +17,16 @@ public interface ExceptionMessages {
 	String EXC_TYPE_COLLECTION_UNSUPPORTED_GEN_TYPE = "The set type '%s' for property sourceType() in '" + Option.class + "' with option name '%s' is not support (need a static valueOf(String) method or constructor with 1 parameter from type String.";
 	String EXC_TYPE_COLLECTION_NOT_INSTANCIABLE = "From the collection type '%s' for parameter '%s' could not be instanziated.";
 	String EXC_TYPE_GENERIC_TYPE_COLLECTION = "The property sourceType() from '" + Option.class + "' for the parameter '%s' is a collection type (class: is '%s')";
-
-	String EXC_EXTRACTOR_DOUBLE_ARGUMENT = "There is already a argument with the name '-%s:'.";
+	String EXC_TYPE_SOURCE_MUST_BE_CLASS = "The property sourceType() from annotation '" + Option.class + "' type must be set to '" + Class.class + "' for parameter '%s' but is '%s'.";
+	String EXC_TYPE_SOURCE_MUST_NOT_BE_SET = "The property sourceType() from annotation '" + Option.class + "' must not be set for parameter '%s', sourceType() is '%s' for %s.";
+	String EXC_TYPE_ARGUMENTS_NOT_ALLOWED = "For Option '%s' is no '" + Arguments.class + "' annotation allowed.";
+	
+	String EXC_EXTRACTOR_DOUBLE_OPTION = "There is already a argument with the name '-%s:'.";
 	String EXC_EXTRACTOR_SEVERAL_ARGUMENT_PROGRAM = "The class '%s' contains serveral '@" + CliProgram.class + "' Annotations, but only one is allowed.";
 	String EXC_EXTRACTOR_NO_ARGUMENT_PROGRAM = "The class '%s' should contain exactly one '@" + CliProgram.class + "' Annotation.";
-	String EXC_EXTRACTOR_ARGUMENT_VALUES_MISSING_NAME = "The %s '%s' with '@" + Arguments.class + ".name()' is required when '@" + Option.class + "' is not present on the same element.";
-	String EXC_EXTRACTOR_ARGUMENT_VALUES_NAME_NOT_ALLOWED = "The %s '%s' with property name() from '@" + Arguments.class + "' is not allowed, when '@" + Option.class + "' is present on the same element.";
-	String EXC_EXTRACTOR_ARGUMENT_VALUES_MISSING_ARGUMENT = "No field or method found that have the '@" + Option.class + "' annotation with the name argument -%s'.";
+	String EXC_EXTRACTOR_ARGUMENTS_NAME_MISSING = "The %s '%s' with '@" + Arguments.class + ".name()' is required when '@" + Option.class + "' is not present on the same element.";
+	String EXC_EXTRACTOR_ARGUMENTS_NAME_NOT_ALLOWED = "The %s '%s' with property name() from '@" + Arguments.class + "' is not allowed, when '@" + Option.class + "' is present on the same element.";
+//	String EXC_EXTRACTOR_ARGUMENT_VALUES_MISSING_ARGUMENT = "No field or method found that have the '@" + Option.class + "' annotation with the name argument -%s'.";
 	String EXC_EXTRACTOR_NAME_WRONG_PATTERN = "The value of property name() from '@" + Option.class + "' is '%s', that does not follow the convetion '%s'.";
 	String EXC_EXTRACTOR_COULD_NOT_SET = "Value '%s' could not be set for parameter '%s'.";
 	String EXC_EXTRACTOR_TO_MANY_ARGUMENTS = "The method '%s' contains to many arguments, allowed is only one.";
@@ -40,6 +43,7 @@ public interface ExceptionMessages {
 	String EXC_EXTRACTOR_VALUES_MISSING_CONTENT = "In the array from element '%s' should be at least contains one value.";
 	String EXC_EXTRACTOR_VALUES_METHOD_NO_PARAMETERS = "The method '%s' cannot have any parameters, but have a count of '%i' parameters.";
 	String EXC_EXTRACTOR_FIELD_NOT_STATIC = "The element '%s' is static, a element with a '@" + Option.class + "' annotation havn't to be static.";
+	String EXC_EXTRACTOR_ARGUMENTS_DOUBLE = "There is already element with a '" + Arguments.class + "' annotation assign to option '%s'.";
 	
 	String EXC_PROCESS_MISSING_REQUIRED_ARGUMENTS = "Missing following required arguments: '%s'.";
 }

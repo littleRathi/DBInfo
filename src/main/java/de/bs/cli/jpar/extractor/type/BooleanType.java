@@ -3,7 +3,7 @@ package de.bs.cli.jpar.extractor.type;
 import de.bs.cli.jpar.JParException;
 import de.bs.cli.jpar.ExceptionMessages;
 import de.bs.cli.jpar.extractor.ExtractedOption;
-import de.bs.cli.jpar.extractor.ExtractedValues;
+import de.bs.cli.jpar.extractor.ExtractedArguments;
 import de.bs.cli.jpar.process.Parameters;
 
 public class BooleanType extends Type implements ExceptionMessages {
@@ -11,16 +11,14 @@ public class BooleanType extends Type implements ExceptionMessages {
 	public static final String TRUE_IMPLIZIT = "";
 	public static final String FALSE = "-";
 
-	public BooleanType(final ExtractedOption option) {
-		super(Boolean.class, option);
-		if (option.getSourceType() != null && option.getSourceType() != Void.class) {
-			throw new JParException(""); // TODO exception: source darf bei boolean nicht gesetzt sein.
+	public BooleanType(final ExtractedOption option, final ExtractedArguments arguments) {
+		super(Boolean.class, option, arguments);
+		if (arguments != null) {
+			throw new JParException(EXC_TYPE_NOT_VALIDATEABLE, getOption().getOptionName());
 		}
-	}
-	
-	@Override
-	public void setValues(ExtractedValues values) {
-		throw new JParException(EXC_TYPE_NOT_VALIDATEABLE, getOption().getOptionName());
+		if (option.getSourceType() != null && option.getSourceType() != Void.class) {
+			throw new JParException(EXC_TYPE_SOURCE_MUST_NOT_BE_SET, option.getOptionName(), option.getSourceType(), "Boolean");
+		}
 	}
 	
 	@Override
@@ -32,13 +30,8 @@ public class BooleanType extends Type implements ExceptionMessages {
 	}
 	
 	@Override
-	public boolean isAssignable(final Object value) {
-		return TRUE.equals(value) || FALSE.equals(value);
-	}
-	
-	@Override
 	public Object processArgs(final String option, final String argument, final Parameters args) {
-		if (getValues() != null) {
+		if (getArguments() != null) {
 			throw new JParException(EXC_TYPE_NOT_VALIDATEABLE, getOption().getOptionName());
 		}
 		boolean bool = false;
@@ -53,5 +46,4 @@ public class BooleanType extends Type implements ExceptionMessages {
 		}
 		return bool;
 	}
-
 }

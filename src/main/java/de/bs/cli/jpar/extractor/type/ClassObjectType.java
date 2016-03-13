@@ -1,12 +1,17 @@
 package de.bs.cli.jpar.extractor.type;
 
 import de.bs.cli.jpar.JParException;
+import de.bs.cli.jpar.extractor.ExtractedArguments;
 import de.bs.cli.jpar.extractor.ExtractedOption;
 import de.bs.cli.jpar.process.Parameters;
 
-public class ObjectType extends Type {
-	public ObjectType(final Class<?> targetType, final ExtractedOption extractedArgument) {
-		super(targetType, extractedArgument);
+public class ClassObjectType extends Type {
+	public ClassObjectType(final Class<?> targetType, final ExtractedOption option, final ExtractedArguments arguments) {
+		super(targetType, option, arguments);
+		
+		if (!Class.class.equals(option.getSourceType())) {
+			throw new JParException(EXC_TYPE_SOURCE_MUST_BE_CLASS, option.getOptionName(), option.getSourceType());
+		}
 	}
 	
 	@Override
@@ -20,15 +25,10 @@ public class ObjectType extends Type {
 	}
 	
 	@Override
-	public boolean isAssignable(final Object value) {
-		return true;
-	}
-	
-	@Override
-	public Object processArgs(String argumentName, String argumentValue, Parameters args) {
-		String className = argumentValue;
+	public Object processArgs(String option, String argument, Parameters args) {
+		String className = argument;
 		
-		if (getValues() != null && !getValues().validValue(className)) {
+		if (getArguments() != null && !getArguments().validValue(className)) {
 			throw new JParException(EXC_TYPE_VALUE_NOT_VALID, className, getOption().getOptionName());
 		}
 		
@@ -47,5 +47,4 @@ public class ObjectType extends Type {
 		}
 		return null;
 	}
-
 }

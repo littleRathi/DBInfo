@@ -1,5 +1,7 @@
 package de.bs.cli.jpar.extractor.type;
 
+import de.bs.cli.jpar.JParException;
+import de.bs.cli.jpar.extractor.ExtractedArguments;
 import de.bs.cli.jpar.extractor.ExtractedOption;
 import de.bs.cli.jpar.process.Parameters;
 
@@ -7,8 +9,14 @@ import de.bs.cli.jpar.process.Parameters;
  * For internal use only
  */
 public class VoidType extends Type {
-	public VoidType(final ExtractedOption extractedArgument) {
-		super(Void.class, extractedArgument);
+	public VoidType(final ExtractedOption option, final ExtractedArguments arguments) {
+		super(Void.class, option, arguments);
+		if (option.getSourceType() != null && option.getSourceType() != Void.class) {
+			throw new JParException(EXC_TYPE_SOURCE_MUST_NOT_BE_SET, option.getOptionName(), option.getSourceType(), "Boolean");
+		}
+		if (arguments != null) {
+			throw new JParException(EXC_TYPE_ARGUMENTS_NOT_ALLOWED, option.getOptionName());
+		}
 	}
 
 	@Override
@@ -17,12 +25,7 @@ public class VoidType extends Type {
 	}
 
 	@Override
-	public boolean isAssignable(Object value) {
-		return false;
-	}
-
-	@Override
-	public Object processArgs(String argumentName, String argumentValue, Parameters args) {
+	public Object processArgs(String option, String argument, Parameters args) {
 		return null;
 	}
 

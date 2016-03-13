@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import de.bs.cli.jpar.JParException;
 import de.bs.cli.jpar.extractor.ExtractedOption;
-import de.bs.cli.jpar.extractor.ExtractedValues;
+import de.bs.cli.jpar.extractor.ExtractedArguments;
 import de.bs.cli.jpar.process.Parameters;
 
 public class BooleanTypeTest {
@@ -26,8 +26,8 @@ public class BooleanTypeTest {
 	private static final String EXTRACTED_ARGUMENT_ARG_NAME = "-test:";
 	private static final String WRONG_VALUE = "abc";
 	
-	private ExtractedValues mockExtractedValues() {
-		ExtractedValues values = mock(ExtractedValues.class);
+	private ExtractedArguments mockExtractedValues() {
+		ExtractedArguments values = mock(ExtractedArguments.class);
 		when(values.getDelimiter()).thenReturn(";");
 		
 		return values;
@@ -42,7 +42,7 @@ public class BooleanTypeTest {
 	
 	@Before
 	public void setupTest() {
-		testee = new BooleanType(mockExtractedOption());
+		testee = new BooleanType(mockExtractedOption(), null);
 	}
 	
 	// testcases:Type (superclass)
@@ -67,7 +67,7 @@ public class BooleanTypeTest {
 		option = mockExtractedOption();
 		when(option.getSourceType()).thenReturn((Class)String.class);
 		
-		testee = new BooleanType(option);
+		testee = new BooleanType(option, null);
 		
 		fail();
 	}
@@ -82,31 +82,6 @@ public class BooleanTypeTest {
 		assertThat(description, containsString(EXTRACTED_ARGUMENT_ARG_NAME));
 		assertThat(description, containsString(BooleanType.FALSE));
 		assertThat(description, containsString(BooleanType.TRUE));
-	}
-	
-	@Test
-	public void testIsAssignableWithTrue() {
-		Boolean returned = testee.isAssignable(TRUE);
-		
-		assertThat(returned, equalTo(Boolean.TRUE));
-	}
-	
-	@Test
-	public void testIsAssignableWithFalse() {
-		Boolean returned = testee.isAssignable(FALSE);
-		
-		assertThat(returned, equalTo(Boolean.TRUE));
-	}
-	
-	@Test
-	public void testIsAssignableFalseObjects() {
-		Object[] wrongObjects = new Object[]{new Object(), 16, 5.5, "abc"};
-		
-		for (Object wrongObject: wrongObjects) {
-			Boolean returned = testee.isAssignable(wrongObject);
-			
-			assertThat(returned, equalTo(Boolean.FALSE));
-		}
 	}
 	
 	@Test
@@ -147,7 +122,7 @@ public class BooleanTypeTest {
 	
 	@Test(expected=JParException.class)
 	public void testProcessArgsWithAnythingButArgValues() {
-		testee.setValues(mockExtractedValues());
+		testee = new BooleanType(mockExtractedOption(), mockExtractedValues());
 		
 		String[] args = new String[]{EXTRACTED_ARGUMENT_ARG_NAME + FALSE};
 		Parameters parameters = new Parameters(args);

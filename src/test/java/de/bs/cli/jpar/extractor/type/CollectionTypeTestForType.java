@@ -18,6 +18,7 @@ import java.util.Set;
 import org.junit.Test;
 
 import de.bs.cli.jpar.JParException;
+import de.bs.cli.jpar.extractor.ExtractedArguments;
 import de.bs.cli.jpar.extractor.ExtractedOption;
 
 public class CollectionTypeTestForType {
@@ -30,28 +31,33 @@ public class CollectionTypeTestForType {
 	private ExtractedOption mockExtractedOption(final Class sourceType) {
 		ExtractedOption option = mock(ExtractedOption.class);
 		when(option.getSourceType()).thenReturn(sourceType);
-		when(option.getDelimiter()).thenReturn(";");
 		return option;
+	}
+	
+	private ExtractedArguments mockExtractedArguments() {
+		ExtractedArguments arguments = mock(ExtractedArguments.class);
+		when(arguments.getDelimiter()).thenReturn(";");
+		return arguments;
 	}
 	
 	// check target type
 	@Test(expected=JParException.class)
 	public void testTargetTypeVoid() {
-		testee = new CollectionType(Void.class, mockExtractedOption(String.class));
+		testee = new CollectionType(Void.class, mockExtractedOption(String.class), mockExtractedArguments());
 		
 		fail();
 	}
 	
 	@Test(expected=JParException.class)
 	public void testTargetTypevoid() {
-		testee = new CollectionType(void.class, mockExtractedOption(String.class));
+		testee = new CollectionType(void.class, mockExtractedOption(String.class), mockExtractedArguments());
 		
 		fail();
 	}
 	
 	@Test(expected=JParException.class)
 	public void testTargetTypeObject() {
-		testee = new CollectionType(Object.class, mockExtractedOption(String.class));
+		testee = new CollectionType(Object.class, mockExtractedOption(String.class), mockExtractedArguments());
 		
 		fail();
 	}
@@ -59,7 +65,7 @@ public class CollectionTypeTestForType {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testTargetTypeHashSet() {
-		testee = new CollectionType(HashSet.class, mockExtractedOption(String.class));
+		testee = new CollectionType(HashSet.class, mockExtractedOption(String.class), mockExtractedArguments());
 		
 		assertThat(testee.getTargetType(), equalTo((Class)HashSet.class));
 	}
@@ -67,7 +73,7 @@ public class CollectionTypeTestForType {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testTargetTypeSet() {
-		testee = new CollectionType(Set.class, mockExtractedOption(String.class));
+		testee = new CollectionType(Set.class, mockExtractedOption(String.class), mockExtractedArguments());
 		
 		assertThat(testee.getTargetType(), equalTo((Class)Set.class));
 	}
@@ -75,7 +81,7 @@ public class CollectionTypeTestForType {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testTargetTypeArrayList() {
-		testee = new CollectionType(ArrayList.class, mockExtractedOption(String.class));
+		testee = new CollectionType(ArrayList.class, mockExtractedOption(String.class), mockExtractedArguments());
 		
 		assertThat(testee.getTargetType(), equalTo((Class)ArrayList.class));
 	}
@@ -83,7 +89,7 @@ public class CollectionTypeTestForType {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testTargetTypeLinkedList() {
-		testee = new CollectionType(LinkedList.class, mockExtractedOption(String.class));
+		testee = new CollectionType(LinkedList.class, mockExtractedOption(String.class), mockExtractedArguments());
 		
 		assertThat(testee.getTargetType(), equalTo((Class)LinkedList.class));
 	}
@@ -91,7 +97,7 @@ public class CollectionTypeTestForType {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testTargetTypeList() {
-		testee = new CollectionType(List.class, mockExtractedOption(String.class));
+		testee = new CollectionType(List.class, mockExtractedOption(String.class), mockExtractedArguments());
 		
 		assertThat(testee.getTargetType(), equalTo((Class)List.class));
 	}
@@ -99,7 +105,7 @@ public class CollectionTypeTestForType {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testTargetTypePriorityQueue() {
-		testee = new CollectionType(PriorityQueue.class, mockExtractedOption(String.class));
+		testee = new CollectionType(PriorityQueue.class, mockExtractedOption(String.class), mockExtractedArguments());
 		
 		assertThat(testee.getTargetType(), equalTo((Class)PriorityQueue.class));
 	}
@@ -107,7 +113,7 @@ public class CollectionTypeTestForType {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testTargetTypeCollection() {
-		testee = new CollectionType(Collection.class, mockExtractedOption(String.class));
+		testee = new CollectionType(Collection.class, mockExtractedOption(String.class), mockExtractedArguments());
 		
 		assertThat(testee.getTargetType(), equalTo((Class)Collection.class));
 	}
@@ -116,7 +122,7 @@ public class CollectionTypeTestForType {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testSourceTypeString() {
-		testee = new CollectionType(Set.class, mockExtractedOption(String.class));
+		testee = new CollectionType(Set.class, mockExtractedOption(String.class), mockExtractedArguments());
 		
 		assertThat(testee.getOption().getSourceType(), equalTo((Class)String.class));
 	}
@@ -124,7 +130,7 @@ public class CollectionTypeTestForType {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testSourceTypeFile() {
-		testee = new CollectionType(Set.class, mockExtractedOption(File.class));
+		testee = new CollectionType(Set.class, mockExtractedOption(File.class), mockExtractedArguments());
 		
 		assertThat(testee.getOption().getSourceType(), equalTo((Class)File.class));
 	}
@@ -132,21 +138,21 @@ public class CollectionTypeTestForType {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testSourceTypeInteger() {
-		testee = new CollectionType(Set.class, mockExtractedOption(Integer.class));
+		testee = new CollectionType(Set.class, mockExtractedOption(Integer.class), mockExtractedArguments());
 		
 		assertThat(testee.getOption().getSourceType(), equalTo((Class)Integer.class));
 	}
 	
 	@Test(expected=JParException.class)
 	public void testSourceTypeObject() {
-		testee = new CollectionType(Set.class, mockExtractedOption(Object.class));
+		testee = new CollectionType(Set.class, mockExtractedOption(Object.class), mockExtractedArguments());
 		
 		fail();
 	}
 	
 	@Test(expected=JParException.class)
 	public void testSourceTypeList() {
-		testee = new CollectionType(Set.class, mockExtractedOption(List.class));
+		testee = new CollectionType(Set.class, mockExtractedOption(List.class), mockExtractedArguments());
 		
 		fail();
 	}

@@ -17,7 +17,7 @@ import org.junit.Test;
 
 import de.bs.cli.jpar.JParException;
 import de.bs.cli.jpar.extractor.ExtractedOption;
-import de.bs.cli.jpar.extractor.ExtractedValues;
+import de.bs.cli.jpar.extractor.ExtractedArguments;
 import de.bs.cli.jpar.process.Parameters;
 
 @SuppressWarnings("rawtypes")
@@ -26,12 +26,9 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 	private static final Class SOURCE_TYPE = String.class;
 	
 	private ExtractedOption option;
-	private ExtractedValues values;
+	private ExtractedArguments arguments;
 	
 	private static final String EXTRACTED_ARGUMENT_ARG_NAME = "-test:";
-	
-	private static final String ASSIGNABLE_STRING = "abcdefg";
-	private static final Object ASSIGNABLE_OBJECT = new Object();
 	
 	private static final String ARGUMENT_2A = "a00;a02";
 	private static final String ARGUMENT_AB = "a00;b00";
@@ -43,7 +40,8 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 	private static final String ALLOWED_VALUE_A2 = "a02";
 	private static final String ALLOWED_VALUE_B0 = "b00";
 	private static final String[][] ALLOWED_VALUES = new String[][]{
-		{ALLOWED_VALUE_A0, ALLOWED_VALUE_A1, ALLOWED_VALUE_A2},{ALLOWED_VALUE_B0}};
+		{ALLOWED_VALUE_A0, ALLOWED_VALUE_A1, ALLOWED_VALUE_A2},{ALLOWED_VALUE_B0}
+	};
 	
 	protected abstract Class<T> getCollectionType();
 	
@@ -51,21 +49,19 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 	
 	protected abstract Collection getWrongCollectionInstance();
 		
-	private ExtractedValues mockExtractedValuesDelimiterArguments() {
-		values = mock(ExtractedValues.class);
-		when(values.getDelimiter()).thenReturn(DELIMITER);
-		when(values.getOption()).thenReturn(option);
-		when(values.getValues()).thenReturn(ALLOWED_VALUES);
+	private ExtractedArguments mockExtractedArgumentsDelimiter() {
+		arguments = mock(ExtractedArguments.class);
+		when(arguments.getDelimiter()).thenReturn(DELIMITER);
+		when(arguments.getValues()).thenReturn(ALLOWED_VALUES);
 		
-		return values;
+		return arguments;
 	}
 	
-	private ExtractedValues mockExtractedValuesDelimiterOnly() {
-		values = mock(ExtractedValues.class);
-		when(values.getDelimiter()).thenReturn(DELIMITER);
-		when(values.getOption()).thenReturn(option);
+	private ExtractedArguments mockExtractedArgumentsDelimiterOnly() {
+		arguments = mock(ExtractedArguments.class);
+		when(arguments.getDelimiter()).thenReturn(DELIMITER);
 		
-		return values;
+		return arguments;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -73,7 +69,6 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 		option = mock(ExtractedOption.class);
 		when(option.getOptionName()).thenReturn(EXTRACTED_ARGUMENT_ARG_NAME);
 		when(option.getManuelDescription()).thenReturn("Some meaningless text");
-		when(option.getDelimiter()).thenReturn(DELIMITER);
 		when(option.getSourceType()).thenReturn(SOURCE_TYPE);
 		
 		return option;
@@ -81,8 +76,7 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 	
 	@Before
 	public void setupTest() {
-		testee = new CollectionType(getCollectionType(), mockExtractedOption());
-		testee.setValues(mockExtractedValuesDelimiterArguments());
+		testee = new CollectionType(getCollectionType(), mockExtractedOption(), mockExtractedArgumentsDelimiter());
 	}
 	
 	// type check test
@@ -124,7 +118,7 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 		option = mockExtractedOption();
 		when(option.getSourceType()).thenReturn((Class)Void.class);
 		
-		testee = new CollectionType(getCollectionType(), option);
+		testee = new CollectionType(getCollectionType(), option, null);
 		
 		fail();
 	}
@@ -141,38 +135,38 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 		assertThat(description, containsString(DELIMITER));
 	}
 	
-	@Test
-	public void testIsAssignableWithString() {
-		Boolean returned = testee.isAssignable(ASSIGNABLE_STRING);
-		
-		assertThat(returned, equalTo(Boolean.FALSE));
-	}
-	
-	@Test
-	public void testIsAssignableWithObject() {
-		Boolean returned = testee.isAssignable(ASSIGNABLE_OBJECT);
-		
-		assertThat(returned, equalTo(Boolean.FALSE));
-	}
-	
-	@Test
-	public void testIsAssignableWithList() {
-		Boolean returned = testee.isAssignable(getWrongCollectionInstance());
-		
-		assertThat(returned, equalTo(Boolean.FALSE));
-	}
-	
-	@Test
-	public void testIsAssignableWithSet() {
-		Boolean returned = testee.isAssignable(getCollectionInstance());
-		
-		assertThat(returned, equalTo(Boolean.TRUE));
-	}
+//	@Test
+//	public void testIsAssignableWithString() {
+//		Boolean returned = testee.isAssignable(ASSIGNABLE_STRING);
+//		
+//		assertThat(returned, equalTo(Boolean.FALSE));
+//	}
+//	
+//	@Test
+//	public void testIsAssignableWithObject() {
+//		Boolean returned = testee.isAssignable(ASSIGNABLE_OBJECT);
+//		
+//		assertThat(returned, equalTo(Boolean.FALSE));
+//	}
+//	
+//	@Test
+//	public void testIsAssignableWithList() {
+//		Boolean returned = testee.isAssignable(getWrongCollectionInstance());
+//		
+//		assertThat(returned, equalTo(Boolean.FALSE));
+//	}
+//	
+//	@Test
+//	public void testIsAssignableWithSet() {
+//		Boolean returned = testee.isAssignable(getCollectionInstance());
+//		
+//		assertThat(returned, equalTo(Boolean.TRUE));
+//	}
 	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testProcessArgs2AWithValues() {
-		when(values.validValues((String[])isNotNull())).thenReturn(true);
+		when(arguments.validValues((String[])isNotNull())).thenReturn(true);
 		
 		Parameters args = new Parameters(new String[]{EXTRACTED_ARGUMENT_ARG_NAME + ARGUMENT_2A});
 		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, ARGUMENT_2A, args);
@@ -184,7 +178,7 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 	
 	@Test(expected=JParException.class)
 	public void testProcessArgsABWithValues() {
-		when(values.validValues((String[])isNotNull())).thenReturn(false);
+		when(arguments.validValues((String[])isNotNull())).thenReturn(false);
 		
 		Parameters args = new Parameters(new String[]{EXTRACTED_ARGUMENT_ARG_NAME + ARGUMENT_AB});
 		testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, ARGUMENT_AB, args);
@@ -195,7 +189,7 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testProcessArgsBWithValues() {
-		when(values.validValues((String[])isNotNull())).thenReturn(true);
+		when(arguments.validValues((String[])isNotNull())).thenReturn(true);
 		
 		Parameters args = new Parameters(new String[]{EXTRACTED_ARGUMENT_ARG_NAME + ARGUMENT_B});
 		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, ARGUMENT_B, args);
@@ -208,9 +202,8 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testProcessArgs2AWithoutValuesProperty() {
-		testee = new CollectionType(getCollectionType(), mockExtractedOption());
-		testee.setValues(mockExtractedValuesDelimiterOnly());
-		when(values.validValues((String[])isNotNull())).thenReturn(true);
+		testee = new CollectionType(getCollectionType(), mockExtractedOption(), mockExtractedArgumentsDelimiterOnly());
+		when(arguments.validValues((String[])isNotNull())).thenReturn(true);
 		
 		Parameters args = new Parameters(new String[]{EXTRACTED_ARGUMENT_ARG_NAME + ARGUMENT_2A});
 		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, ARGUMENT_2A, args);
@@ -223,9 +216,8 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testProcessArgsABWithoutValuesProperty() {
-		testee = new CollectionType(getCollectionType(), mockExtractedOption());
-		testee.setValues(mockExtractedValuesDelimiterOnly());
-		when(values.validValues((String[])isNotNull())).thenReturn(true);
+		testee = new CollectionType(getCollectionType(), mockExtractedOption(), mockExtractedArgumentsDelimiterOnly());
+		when(arguments.validValues((String[])isNotNull())).thenReturn(true);
 		
 		Parameters args = new Parameters(new String[]{EXTRACTED_ARGUMENT_ARG_NAME + ARGUMENT_AB});
 		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, ARGUMENT_AB, args);
@@ -238,9 +230,8 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testProcessArgsBWithoutValuesProperty() {
-		testee = new CollectionType(getCollectionType(), mockExtractedOption());
-		testee.setValues(mockExtractedValuesDelimiterOnly());
-		when(values.validValues((String[])isNotNull())).thenReturn(true);
+		testee = new CollectionType(getCollectionType(), mockExtractedOption(), mockExtractedArgumentsDelimiterOnly());
+		when(arguments.validValues((String[])isNotNull())).thenReturn(true);
 		
 		Parameters args = new Parameters(new String[]{EXTRACTED_ARGUMENT_ARG_NAME + ARGUMENT_B});
 		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, ALLOWED_VALUE_B0, args);

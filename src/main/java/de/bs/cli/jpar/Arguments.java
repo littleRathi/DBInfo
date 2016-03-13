@@ -5,11 +5,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+// TODO Rename property values to validValues()?
+// rename annotation to ValidArguments is wrong, because values is not required
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})
 public @interface Arguments {
 	String name() default "";
-	String delimiter();
+	String delimiter() default "";
 	// must be set, when the Annotation is added with the 
 	// @Argument annotation (so the field, contains the
 	// target for the selected value! In this case, name

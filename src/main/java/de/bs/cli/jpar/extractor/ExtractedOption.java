@@ -15,7 +15,8 @@ public abstract class ExtractedOption implements ExceptionMessages {
 	private Option option;
 	private Type type;
 	
-	public ExtractedOption(final Option option) {
+	
+	public ExtractedOption(final Option option, final ExtractedArguments arguments, final Class<?> targetType) {
 		if (option.name() == null || !option.name().matches(ARGUMENT_NAME_PATTERN)) {
 			throw new JParException(EXC_EXTRACTOR_NAME_WRONG_PATTERN, option.name(), ARGUMENT_NAME_PATTERN);
 		}
@@ -23,6 +24,7 @@ public abstract class ExtractedOption implements ExceptionMessages {
 		this.option = option;
 		this.elName = this.option.name().toUpperCase();
 		this.optionName = "-" + this.option.name();
+		this.type = Type.getTypeProcessor(targetType, this, arguments);
 	}
 	
 	@Override
@@ -63,9 +65,9 @@ public abstract class ExtractedOption implements ExceptionMessages {
 	public Class<?> getTargetType() {
 		return type.getTargetType();
 	}
-	protected void setTargetType(final Class<?> targetType) {
-		this.type = Type.getTypeProcessor(targetType, this);
-	}
+//	protected void setTargetType(final Class<?> targetType) {
+//		this.type = Type.getTypeProcessor(targetType, this, arguments);
+//	}
 	public abstract String getTargetName();
 	
 	public Option getOption() {
@@ -81,12 +83,6 @@ public abstract class ExtractedOption implements ExceptionMessages {
 		return option.required();
 	}
 
-	public String getDelimiter() {
-		return type.getValues() != null ? type.getValues().getDelimiter() : null;
-	}
-	public String[][] getValues() {
-		return type.getValues() != null ? type.getValues().getValues() : null;
-	}
 	public Type getType() {
 		return type;
 	}

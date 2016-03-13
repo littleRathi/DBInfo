@@ -13,16 +13,14 @@ import de.bs.cli.jpar.JParException;
 import de.bs.cli.jpar.Arguments;
 import de.bs.cli.jpar.ExceptionMessages;
 
-public class ExtractedValues implements ExceptionMessages {
+public class ExtractedArguments implements ExceptionMessages {
 	private Arguments arguments;
-	private ExtractedOption option;
 	private String[][] values;
 	private List<Set<String>> valuesSet = new LinkedList<Set<String>>();
 	
-	private ExtractedValues(final String[][] values, final Arguments arguments, final ExtractedOption option) {
+	private ExtractedArguments(final String[][] values, final Arguments arguments) {
 		this.values = values;
 		this.arguments = arguments;
-		this.option = option;
 		
 		for (String[] subValues: values) {
 			Set<String> subSet = new HashSet<String>();
@@ -31,10 +29,6 @@ public class ExtractedValues implements ExceptionMessages {
 			}
 			valuesSet.add(subSet);
 		}
-	}
-	
-	public ExtractedOption getOption() {
-		return option;
 	}
 	public String getDelimiter() {
 		return arguments.delimiter();
@@ -78,12 +72,12 @@ public class ExtractedValues implements ExceptionMessages {
 		return valid;
 	}
 	
-	private static String[][] extractValuesFromArgumentValues(final Arguments arguments, final ExtractedOption option) {
+	private static String[][] extractValuesFromArgumentValues(final Arguments arguments, final String optionName) {
 		if (arguments.values() == null || arguments.values().length == 0) {
-			throw new JParException(EXC_EXTRACTOR_NEED_VALUES, option.getOptionName()); // TODO Exception [REMOVE CONDITION? allow no list]
+			throw new JParException(EXC_EXTRACTOR_NEED_VALUES, optionName); // TODO Exception [REMOVE CONDITION? allow no list]
 		}
 		if (arguments.name() != null && !arguments.name().isEmpty()) {
-			throw new JParException(EXC_EXTRACTOR_VALUES_NO_NAME, option.getOptionName());
+			throw new JParException(EXC_EXTRACTOR_VALUES_NO_NAME, optionName);
 		}
 		
 		return new String[][]{arguments.values()};
@@ -93,15 +87,15 @@ public class ExtractedValues implements ExceptionMessages {
 //	Array, Collection (List, Set, ...)
 //		=> get Type and try to transform, if error, then the is the type wrong
 //	internal transformation to a internal representation from String[][] Validate <-(ValidateValues|ValidateValue)
-	private static String[][] extractValuesFromField(final Arguments arguments, final ExtractedOption option, final Field field) {
-		preConditionExtractValues(arguments, option, field.getType(), field.getModifiers(), field.toString());
+	private static String[][] extractValuesFromField(final Arguments arguments, final String optionName, final Field field) {
+		preConditionExtractValues(arguments, optionName, field.getType(), field.getModifiers(), field.toString());
 
 		String[][] values = null;
 		try {
 			field.setAccessible(true);
 			values = (String[][])field.get(null);
 		} catch (Exception e) {
-			throw new JParException(EXC_EXTRACTOR_VALUES_GET_VALUES, field.toString(), option.getOptionName());
+			throw new JParException(EXC_EXTRACTOR_VALUES_GET_VALUES, field.toString(), optionName);
 		}
 		
 		postConditionExtractValues(values, field.toString());
@@ -109,8 +103,8 @@ public class ExtractedValues implements ExceptionMessages {
 		return values;
 	}
 	
-	private static String[][] extractValuesFromMethod(final Arguments arguments, final ExtractedOption option, final Method method) {
-		preConditionExtractValues(arguments, option, method.getReturnType(), method.getModifiers(), method.toString());
+	private static String[][] extractValuesFromMethod(final Arguments arguments, final String optionName, final Method method) {
+		preConditionExtractValues(arguments, optionName, method.getReturnType(), method.getModifiers(), method.toString());
 		
 		Class<?>[] parameters = method.getParameterTypes();
 		if (parameters != null && parameters.length > 0) {
@@ -122,7 +116,7 @@ public class ExtractedValues implements ExceptionMessages {
 		try {
 			values = (String[][]) method.invoke(null);
 		} catch (Exception e) {
-			throw new JParException(EXC_EXTRACTOR_VALUES_GET_VALUES, method.toString(), option.getOptionName());
+			throw new JParException(EXC_EXTRACTOR_VALUES_GET_VALUES, method.toString(), optionName);
 		}
 
 		postConditionExtractValues(values, method.toString());
@@ -142,9 +136,9 @@ public class ExtractedValues implements ExceptionMessages {
 		}
 	}
 	
-	private static void preConditionExtractValues(final Arguments arguments, final ExtractedOption option, final Class<?> valueType, final int modifiers, final String element) {
+	private static void preConditionExtractValues(final Arguments arguments, final String optionName, final Class<?> valueType, final int modifiers, final String element) {
 		if (arguments.values() != null && arguments.values().length > 0) {
-			throw new JParException(EXC_EXTRACTOR_NO_VALUES_ALLOWED, element, option.getOptionName());
+			throw new JParException(EXC_EXTRACTOR_NO_VALUES_ALLOWED, element, optionName);
 		}
 		if (arguments.name() == null || arguments.name().isEmpty()) {
 			throw new JParException(EXC_EXTRACTOR_VALUES_NEED_NAME, element);
@@ -157,29 +151,28 @@ public class ExtractedValues implements ExceptionMessages {
 		}
 	}
 	
-	public static ExtractedValues getAnnotationOnField(final Arguments argumentValues, final Option argument, final ExtractedOption extractedArgument, final Field field) {
+	public static ExtractedArguments getAnnotationOnField(final Arguments argumentValues, final Option argument, final String optionName, final Field field) {
 		String[][] values = null;
 		if (argument != null) {
-			values = extractValuesFromArgumentValues(argumentValues, extractedArgument);
+			values = extractValuesFromArgumentValues(argumentValues, optionName);
 		} else {
-			values = extractValuesFromField(argumentValues, extractedArgument, field);
+			values = extractValuesFromField(argumentValues, optionName, field);
 		}
-		return createExtractedValues(values, argumentValues, extractedArgument);
+		return createExtractedArguments(values, argumentValues);
 	}
 	
-	public static ExtractedValues getAnnotationOnMethod(final Arguments argumentValues, final Option argument, final ExtractedOption extractedArgument, final Method method) {
+	public static ExtractedArguments getAnnotationOnMethod(final Arguments argumentValues, final Option argument, final String optionName, final Method method) {
 		String[][] values = null;
 		if (argument != null) {
-			values = extractValuesFromArgumentValues(argumentValues, extractedArgument);
+			values = extractValuesFromArgumentValues(argumentValues, optionName);
 		} else {
-			values = extractValuesFromMethod(argumentValues, extractedArgument, method);
+			values = extractValuesFromMethod(argumentValues, optionName, method);
 		}
-		return createExtractedValues(values, argumentValues, extractedArgument);
+		return createExtractedArguments(values, argumentValues);
 	}
 	
-	private static ExtractedValues createExtractedValues(final String[][] values, final Arguments arguments, final ExtractedOption option) {
-		ExtractedValues extractedValues = new ExtractedValues(values, arguments, option);
-		option.getType().setValues(extractedValues);
+	private static ExtractedArguments createExtractedArguments(final String[][] values, final Arguments arguments) {
+		ExtractedArguments extractedValues = new ExtractedArguments(values, arguments);
 		return extractedValues;
 	}
 }

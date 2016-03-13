@@ -40,64 +40,15 @@ public class ParameterExtractor implements ExceptionMessages {
 	public ParameterExtractor(final Class<?> programClass) {
 		extractDataFromProgram(programClass);
 		setDefaults();
-		extractDataFromFields(programClass);
-		extractDataFromMethods(programClass);
-		extractValuesFromFields(programClass);
-		extractValuesFromMethods(programClass);
-	}
-	
-	private void setDefaults() {
-		addExtractedParameter(new HelpParameter());
-	}
-	
-	private void extractValuesFromFields(final Class<?> programClass) {
-		Field[] allFields = programClass.getDeclaredFields();
 		
-		for (Field field: allFields) {
-			Arguments argumentValues = field.getAnnotation(Arguments.class);
-			Option option = field.getAnnotation(Option.class); // for verification 
-			
-			if (argumentValues != null) {
-				ExtractedOption extractedArgument = getExtractedArgumentFor(argumentValues, option, "field", field.toString());
-				ExtractedValues.getAnnotationOnField(argumentValues, option, extractedArgument, field);
-			}
-		}
+		Map<String, ExtractedArguments> extractedArguments = new HashMap<String, ExtractedArguments>();
+		extractValuesFromFields(programClass, extractedArguments);
+		extractValuesFromMethods(programClass, extractedArguments);
+		extractDataFromFields(programClass, extractedArguments);
+		extractDataFromMethods(programClass, extractedArguments);
+		
+		
 	}
-	
-	private void extractValuesFromMethods(final Class<?> programClass) {
-		Method[] allMethods = programClass.getDeclaredMethods();
-		
-		for (Method method: allMethods) {
-			Arguments argumentValues = method.getAnnotation(Arguments.class);
-			Option option = method.getAnnotation(Option.class); // for verification
-
-			if (argumentValues != null) {
-				ExtractedOption extractedArgument = getExtractedArgumentFor(argumentValues, option, "method", method.toString());
-				ExtractedValues.getAnnotationOnMethod(argumentValues, option, extractedArgument, method);
-			}
-		}
-	}
-	
-	private ExtractedOption getExtractedArgumentFor(final Arguments values, final Option option, final String elementName, final String classDefinition) {
-		if (option == null && (values.name() == null || values.name().isEmpty())) {
-			 // TODO Exception DONE [!] double check? also in ExtractedValues.getAnnotationOnMethod()
-			throw new JParException(EXC_EXTRACTOR_ARGUMENT_VALUES_MISSING_NAME, elementName, classDefinition);
-		}
-		if (option != null && values.name() != null && !values.name().isEmpty()) {
-			 // TODO Exception DONE [!] double check? also in ExtractedValues.getAnnotationOnMethod()
-			throw new JParException(EXC_EXTRACTOR_ARGUMENT_VALUES_NAME_NOT_ALLOWED, elementName, classDefinition);
-		}
-		
-		String argName = (option == null ? values.name() : option.name());
-		ExtractedOption extractedParameter = argToExtractedOptions.get("-" + argName);
-		
-		if (extractedParameter == null) {
-			throw new JParException(EXC_EXTRACTOR_ARGUMENT_VALUES_MISSING_ARGUMENT, argName);
-		}
-		
-		return extractedParameter;
-	}
-	
 	
 	private void extractDataFromProgram(final Class<?> programClass) {
 		CliProgram[] progAnnotations = programClass.getAnnotationsByType(CliProgram.class);
@@ -113,7 +64,64 @@ public class ParameterExtractor implements ExceptionMessages {
 		}
 	}
 	
-	private void extractDataFromFields(final Class<?> programClass) {
+	private void setDefaults() {
+		addExtractedParameter(new HelpParameter());
+	}
+	
+	private void extractValuesFromFields(final Class<?> programClass, final Map<String, ExtractedArguments> extractedArguments) {
+		Field[] allFields = programClass.getDeclaredFields();
+		
+		for (Field field: allFields) {
+			Arguments arguments = field.getAnnotation(Arguments.class);
+			
+			if (arguments != null) {
+				Option option = field.getAnnotation(Option.class); // for verification 
+				
+				String optionName = getOptionName(arguments, option, "field", field.toString());
+				ExtractedArguments exArguments = ExtractedArguments.getAnnotationOnField(arguments, option, optionName, field);
+				
+				addExtractedArguments(exArguments, optionName, extractedArguments);
+			}
+		}
+	}
+	
+	private void extractValuesFromMethods(final Class<?> programClass, final Map<String, ExtractedArguments> extractedArguments) {
+		Method[] allMethods = programClass.getDeclaredMethods();
+		
+		for (Method method: allMethods) {
+			Arguments arguments = method.getAnnotation(Arguments.class);
+
+			if (arguments != null) {
+				Option option = method.getAnnotation(Option.class); // for verification
+				
+				String optionName = getOptionName(arguments, option, "method", method.toString());
+				ExtractedArguments exArguments = ExtractedArguments.getAnnotationOnMethod(arguments, option, optionName, method);
+
+				addExtractedArguments(exArguments, optionName, extractedArguments);
+			}
+		}
+	}
+	
+	private void addExtractedArguments(final ExtractedArguments arguments, final String optionName, final Map<String, ExtractedArguments> extractedArguments) {
+		if (extractedArguments.containsKey(optionName)) {
+			throw new JParException(EXC_EXTRACTOR_ARGUMENTS_DOUBLE, optionName);
+		} else {
+			extractedArguments.put(optionName, arguments);
+		}
+	}
+	
+	private String getOptionName(final Arguments arguments, final Option option, final String elementName, final String classDefinition) {
+		if (option != null && arguments.name() != null && !arguments.name().isEmpty()) {
+			throw new JParException(EXC_EXTRACTOR_ARGUMENTS_NAME_NOT_ALLOWED, elementName, classDefinition);
+		}
+		if (option == null && (arguments.name() == null || arguments.name().isEmpty())) {
+			throw new JParException(EXC_EXTRACTOR_ARGUMENTS_NAME_MISSING, elementName, classDefinition);
+		}
+		
+		return "-" + (option != null ? option.name() : arguments.name());
+	}
+	
+	private void extractDataFromFields(final Class<?> programClass, final Map<String, ExtractedArguments> extractedArguments) {
 		Field[] allFields = programClass.getDeclaredFields();
 		
 		for (Field field: allFields) {
@@ -121,13 +129,13 @@ public class ParameterExtractor implements ExceptionMessages {
 			if (option != null) {
 				field.setAccessible(true);
 				
-				ExtractedOption ea = new ExtractedOptionField(field, option);
+				ExtractedOption ea = new ExtractedOptionField(field, option, extractedArguments.get("-" + option.name()));
 				addExtractedParameter(ea);
 			}
 		}
 	}
 	
-	private void extractDataFromMethods(final Class<?> programClass) {
+	private void extractDataFromMethods(final Class<?> programClass, final Map<String, ExtractedArguments> extractedArguments) {
 		Method[] allMethods = programClass.getDeclaredMethods();
 		
 		for (Method method: allMethods) {
@@ -135,7 +143,7 @@ public class ParameterExtractor implements ExceptionMessages {
 			if (option != null) {
 				method.setAccessible(true);
 				
-				ExtractedOption ea = new ExtractedOptionMethod(method, option);
+				ExtractedOption ea = new ExtractedOptionMethod(method, option, extractedArguments.get("-" + option.name()));
 				addExtractedParameter(ea);
 			}
 		}
@@ -150,7 +158,7 @@ public class ParameterExtractor implements ExceptionMessages {
 				requiredExtractedOptions.put(optin.getOptionName(), optin);
 			}
 		} else {
-			throw new JParException(EXC_EXTRACTOR_DOUBLE_ARGUMENT, optin.getOptionName());
+			throw new JParException(EXC_EXTRACTOR_DOUBLE_OPTION, optin.getOptionName());
 		}
 		
 	}

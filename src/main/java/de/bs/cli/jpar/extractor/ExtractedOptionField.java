@@ -11,14 +11,13 @@ public class ExtractedOptionField extends ExtractedOption {
 	
 	private Field field;
 	
-	public ExtractedOptionField(final Field field, final Option option) {
-		super(option);
+	public ExtractedOptionField(final Field field, final Option option, final ExtractedArguments arguments) {
+		super(option, arguments, field.getType());
 		this.field = field;
 		
 		if (Modifier.isStatic(field.getModifiers())) {
 			throw new JParException(EXC_EXTRACTOR_FIELD_NOT_STATIC, field.toString());
 		}
-		setTargetType(field.getType());
 	}
 	@Override
 	public String getTargetName() {

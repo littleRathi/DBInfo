@@ -32,8 +32,7 @@ public class HelpParameter extends ExtractedOption {
 			public Class<?> sourceType() {
 				return Void.class;
 			}
-		});
-		setTargetType(Void.class);
+		}, null, Void.class);
 	}
 
 	@Override
