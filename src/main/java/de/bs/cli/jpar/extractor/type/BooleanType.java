@@ -26,7 +26,7 @@ public class BooleanType extends Type implements ExceptionMessages {
 		descriptionBuilder.append(getOption().getOptionName()).append(":+ or ")
 			.append(getOption()).append(" to enable or also")
 			.append(getOption().getOptionName())
-			.append(":- to disable.").toString();
+			.append(":- to disable.");
 	}
 	
 	@Override

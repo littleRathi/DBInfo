@@ -42,12 +42,10 @@ public class ParameterExtractor implements ExceptionMessages {
 		setDefaults();
 		
 		Map<String, ExtractedArguments> extractedArguments = new HashMap<String, ExtractedArguments>();
-		extractValuesFromFields(programClass, extractedArguments);
-		extractValuesFromMethods(programClass, extractedArguments);
+		extractArgumentsFromFields(programClass, extractedArguments);
+		extractArgumentsFromMethods(programClass, extractedArguments);
 		extractDataFromFields(programClass, extractedArguments);
 		extractDataFromMethods(programClass, extractedArguments);
-		
-		
 	}
 	
 	private void extractDataFromProgram(final Class<?> programClass) {
@@ -68,7 +66,7 @@ public class ParameterExtractor implements ExceptionMessages {
 		addExtractedParameter(new HelpParameter());
 	}
 	
-	private void extractValuesFromFields(final Class<?> programClass, final Map<String, ExtractedArguments> extractedArguments) {
+	private void extractArgumentsFromFields(final Class<?> programClass, final Map<String, ExtractedArguments> extractedArguments) {
 		Field[] allFields = programClass.getDeclaredFields();
 		
 		for (Field field: allFields) {
@@ -85,7 +83,7 @@ public class ParameterExtractor implements ExceptionMessages {
 		}
 	}
 	
-	private void extractValuesFromMethods(final Class<?> programClass, final Map<String, ExtractedArguments> extractedArguments) {
+	private void extractArgumentsFromMethods(final Class<?> programClass, final Map<String, ExtractedArguments> extractedArguments) {
 		Method[] allMethods = programClass.getDeclaredMethods();
 		
 		for (Method method: allMethods) {

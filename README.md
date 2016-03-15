@@ -30,6 +30,7 @@ Relevant are only the package de.bs.cli.jpar:
 - extends de.bs.cli.jpar.process.Parameters with methods:
  * isNextOption(): boolean
 - include in the manualDescription part the valid values + add tests for that
+- special class/interface that contains all default values
 
 ## Structures
 

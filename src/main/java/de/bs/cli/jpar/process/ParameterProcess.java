@@ -36,7 +36,7 @@ public class ParameterProcess implements ExceptionMessages {
 			
 			ExtractedOption op = argExtractor.getExtractedOptionForForOptionName(option);
 			if (op != null) {
-				op.prozessArg(program, option, argument, arguments);
+				op.processArg(program, option, argument, arguments);
 				required.remove(option);
 			}
 		}

@@ -1,10 +1,11 @@
 package de.bs.cli.jpar;
 
+import de.bs.cli.jpar.internal.Defaults;
 import de.bs.cli.jpar.manual.ParameterManual;
 import de.bs.cli.jpar.process.ParameterProcess;
 
 public class JPar {
-	public static final String PROG = "PROG";
+	public static final String PROG = Defaults.PROG_SHORTCUT;
 	
 	private static final String EXCEPTION_MISSING_CALLABLE_PROGRAM = "No Class found in the stacktrace that has the @" + CliProgram.class + " annotation.";
 	

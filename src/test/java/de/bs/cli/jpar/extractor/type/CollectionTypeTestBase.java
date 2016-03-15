@@ -3,6 +3,7 @@ package de.bs.cli.jpar.extractor.type;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -68,7 +69,7 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 	private ExtractedOption mockExtractedOption() {
 		option = mock(ExtractedOption.class);
 		when(option.getOptionName()).thenReturn(EXTRACTED_ARGUMENT_ARG_NAME);
-		when(option.getManuelDescription()).thenReturn("Some meaningless text");
+		when(option.getManualDescription()).thenReturn("Some meaningless text");
 		when(option.getSourceType()).thenReturn(SOURCE_TYPE);
 		
 		return option;
@@ -135,34 +136,6 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 		assertThat(description, containsString(DELIMITER));
 	}
 	
-//	@Test
-//	public void testIsAssignableWithString() {
-//		Boolean returned = testee.isAssignable(ASSIGNABLE_STRING);
-//		
-//		assertThat(returned, equalTo(Boolean.FALSE));
-//	}
-//	
-//	@Test
-//	public void testIsAssignableWithObject() {
-//		Boolean returned = testee.isAssignable(ASSIGNABLE_OBJECT);
-//		
-//		assertThat(returned, equalTo(Boolean.FALSE));
-//	}
-//	
-//	@Test
-//	public void testIsAssignableWithList() {
-//		Boolean returned = testee.isAssignable(getWrongCollectionInstance());
-//		
-//		assertThat(returned, equalTo(Boolean.FALSE));
-//	}
-//	
-//	@Test
-//	public void testIsAssignableWithSet() {
-//		Boolean returned = testee.isAssignable(getCollectionInstance());
-//		
-//		assertThat(returned, equalTo(Boolean.TRUE));
-//	}
-	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testProcessArgs2AWithValues() {
@@ -172,7 +145,7 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, ARGUMENT_2A, args);
 
 		assertThat(result, instanceOf(getCollectionType()));
-		assertThat(((T)result).size(), equalTo(2));
+		assertThat(((Collection<?>)result), hasSize(2));
 		assertThat(((Collection<String>)result), hasItems(ALLOWED_VALUE_A0, ALLOWED_VALUE_A2));
 	}
 	
@@ -195,7 +168,7 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, ARGUMENT_B, args);
 		
 		assertThat(result, instanceOf(getCollectionType()));
-		assertThat(((T)result).size(), equalTo(1));
+		assertThat(((Collection<?>)result), hasSize(1));
 		assertThat(((Collection<String>)result), hasItems(ALLOWED_VALUE_B0));
 	}
 	
@@ -209,7 +182,7 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, ARGUMENT_2A, args);
 		
 		assertThat(result, instanceOf(getCollectionType()));
-		assertThat(((T)result).size(), equalTo(2));
+		assertThat(((Collection<?>)result), hasSize(2));
 		assertThat(((Collection<String>)result), hasItems(ALLOWED_VALUE_A0, ALLOWED_VALUE_A2));
 	}
 	
@@ -223,7 +196,7 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, ARGUMENT_AB, args);
 		
 		assertThat(result, instanceOf(getCollectionType()));
-		assertThat(((T)result).size(), equalTo(2));
+		assertThat(((Collection<?>)result), hasSize(2));
 		assertThat(((Collection<String>)result), hasItems(ALLOWED_VALUE_A0, ALLOWED_VALUE_B0));
 	}
 	
@@ -237,7 +210,7 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 		Object result = testee.processArgs(EXTRACTED_ARGUMENT_ARG_NAME, ALLOWED_VALUE_B0, args);
 		
 		assertThat(result, instanceOf(getCollectionType()));
-		assertThat(((T)result).size(), equalTo(1));
+		assertThat(((Collection<?>)result), hasSize(1));
 		assertThat(((Collection<String>)result), hasItems(ALLOWED_VALUE_B0));
 	}
 }

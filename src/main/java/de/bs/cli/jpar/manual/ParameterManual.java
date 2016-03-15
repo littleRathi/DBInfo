@@ -57,7 +57,7 @@ public class ParameterManual {
 				sbOption.append("(required option) ");
 			}
 			
-			sbOption.append(option.getManuelDescription()).append(" Usage: ");
+			sbOption.append(option.getManualDescription()).append(" Usage: ");
 			option.getType().getManualDescription(sbOption);
 			
 			String optionText = el.replaceReferencesIn(sbOption.toString());

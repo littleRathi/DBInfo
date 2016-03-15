@@ -41,7 +41,7 @@ public interface ExceptionMessages {
 	String EXC_EXTRACTOR_VALUES_IS_NULL = "The element '%s' contains no values (is null).";
 	String EXC_EXTRACTOR_VALUES_MISSING_GROUPS = "In the array from element '%s' should be at least one 'group'.";
 	String EXC_EXTRACTOR_VALUES_MISSING_CONTENT = "In the array from element '%s' should be at least contains one value.";
-	String EXC_EXTRACTOR_VALUES_METHOD_NO_PARAMETERS = "The method '%s' cannot have any parameters, but have a count of '%i' parameters.";
+	String EXC_EXTRACTOR_VALUES_METHOD_NO_PARAMETERS = "The method '%s' cannot have any parameters, but have a count of '%s' parameters.";
 	String EXC_EXTRACTOR_FIELD_NOT_STATIC = "The element '%s' is static, a element with a '@" + Option.class + "' annotation havn't to be static.";
 	String EXC_EXTRACTOR_ARGUMENTS_DOUBLE = "There is already element with a '" + Arguments.class + "' annotation assign to option '%s'.";
 	

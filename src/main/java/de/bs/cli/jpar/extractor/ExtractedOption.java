@@ -65,9 +65,6 @@ public abstract class ExtractedOption implements ExceptionMessages {
 	public Class<?> getTargetType() {
 		return type.getTargetType();
 	}
-//	protected void setTargetType(final Class<?> targetType) {
-//		this.type = Type.getTypeProcessor(targetType, this, arguments);
-//	}
 	public abstract String getTargetName();
 	
 	public Option getOption() {
@@ -76,7 +73,7 @@ public abstract class ExtractedOption implements ExceptionMessages {
 	public Class<?> getSourceType() {
 		return option.sourceType();
 	}
-	public String getManuelDescription() {
+	public String getManualDescription() {
 		return option.description();
 	}
 	public boolean isRequired() {
@@ -87,5 +84,5 @@ public abstract class ExtractedOption implements ExceptionMessages {
 		return type;
 	}
 	
-	public abstract void prozessArg(final Object program, final String option, final String argument, final Parameters args);
+	public abstract void processArg(final Object program, final String option, final String argument, final Parameters args);
 }

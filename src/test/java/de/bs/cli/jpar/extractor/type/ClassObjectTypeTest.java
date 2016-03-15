@@ -48,7 +48,7 @@ public class ClassObjectTypeTest {
 	private ExtractedOption mockExtractedOption() {
 		option = mock(ExtractedOption.class);
 		when(option.getOptionName()).thenReturn(EXTRACTED_ARGUMENT_ARG_NAME);
-		when(option.getManuelDescription()).thenReturn("some description for ClassObjectType");
+		when(option.getManualDescription()).thenReturn("some description for ClassObjectType");
 		when(option.getSourceType()).thenReturn(SOURCE_TYPE);
 		return option;
 	}
@@ -113,27 +113,6 @@ public class ClassObjectTypeTest {
 		assertThat(description, containsString("Interface"));
 		assertThat(description, containsString(TARGET_TYPE.getName()));
 	}
-	
-//	@Test	TODO del
-//	public void testIsAssignableLinkedList() {
-//		boolean returned = testee.isAssignable(VALID_LINKED_LIST);
-//		
-//		assertThat(returned, equalTo(true));
-//	}
-//	
-//	@Test
-//	public void testIsAssignableArrayList() {
-//		boolean returned = testee.isAssignable(VALID_ARRAY_LIST);
-//		
-//		assertThat(returned, equalTo(true));
-//	}
-//	
-//	@Test
-//	public void testIsAssignableWrongString() {
-//		boolean returned = testee.isAssignable(WRONG_VALUE);
-//		
-//		assertThat(returned, equalTo(false));
-//	}
 	
 	@Test
 	public void testProcessArgsLinkedList() {

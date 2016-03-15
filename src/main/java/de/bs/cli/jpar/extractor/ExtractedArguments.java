@@ -48,6 +48,9 @@ public class ExtractedArguments implements ExceptionMessages {
 		return result;
 	}
 	public boolean validValues(final String[] values) {
+		if (values == null || values.length == 0) {
+			return false;
+		}
 		boolean valid = false;
 		
 		for (Set<String> valueSet: valuesSet) {
@@ -151,24 +154,24 @@ public class ExtractedArguments implements ExceptionMessages {
 		}
 	}
 	
-	public static ExtractedArguments getAnnotationOnField(final Arguments argumentValues, final Option argument, final String optionName, final Field field) {
+	public static ExtractedArguments getAnnotationOnField(final Arguments arguments, final Option option, final String optionName, final Field field) {
 		String[][] values = null;
-		if (argument != null) {
-			values = extractValuesFromArgumentValues(argumentValues, optionName);
+		if (option != null) {
+			values = extractValuesFromArgumentValues(arguments, optionName);
 		} else {
-			values = extractValuesFromField(argumentValues, optionName, field);
+			values = extractValuesFromField(arguments, optionName, field);
 		}
-		return createExtractedArguments(values, argumentValues);
+		return createExtractedArguments(values, arguments);
 	}
 	
-	public static ExtractedArguments getAnnotationOnMethod(final Arguments argumentValues, final Option argument, final String optionName, final Method method) {
+	public static ExtractedArguments getAnnotationOnMethod(final Arguments arguments, final Option option, final String optionName, final Method method) {
 		String[][] values = null;
-		if (argument != null) {
-			values = extractValuesFromArgumentValues(argumentValues, optionName);
+		if (option != null) {
+			values = extractValuesFromArgumentValues(arguments, optionName);
 		} else {
-			values = extractValuesFromMethod(argumentValues, optionName, method);
+			values = extractValuesFromMethod(arguments, optionName, method);
 		}
-		return createExtractedArguments(values, argumentValues);
+		return createExtractedArguments(values, arguments);
 	}
 	
 	private static ExtractedArguments createExtractedArguments(final String[][] values, final Arguments arguments) {

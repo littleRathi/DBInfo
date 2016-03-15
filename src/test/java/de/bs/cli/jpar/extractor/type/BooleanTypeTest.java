@@ -36,7 +36,7 @@ public class BooleanTypeTest {
 	private ExtractedOption mockExtractedOption() {
 		option = mock(ExtractedOption.class);
 		when(option.getOptionName()).thenReturn(EXTRACTED_ARGUMENT_ARG_NAME);
-		when(option.getManuelDescription()).thenReturn("Some meaningless text");
+		when(option.getManualDescription()).thenReturn("Some meaningless text");
 		return option;
 	}
 	

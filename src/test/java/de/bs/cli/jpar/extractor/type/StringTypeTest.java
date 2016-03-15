@@ -36,7 +36,7 @@ public class StringTypeTest {
 	private ExtractedOption mockExtractedOption() {
 		option = mock(ExtractedOption.class);
 		when(option.getOptionName()).thenReturn(EXTRACTED_ARGUMENT_ARG_NAME);
-		when(option.getManuelDescription()).thenReturn("description for the string type...");
+		when(option.getManualDescription()).thenReturn("description for the string type...");
 		
 		return option;
 	}

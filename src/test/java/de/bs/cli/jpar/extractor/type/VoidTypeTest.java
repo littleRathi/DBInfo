@@ -26,7 +26,7 @@ public class VoidTypeTest {
 	private ExtractedOption mockExtractedOption() {
 		option = mock(ExtractedOption.class);
 		when(option.getOptionName()).thenReturn(EXTRACTED_ARGUMENT_ARG_NAME);
-		when(option.getManuelDescription()).thenReturn("Einfache Beschreibung zu VoidType");
+		when(option.getManualDescription()).thenReturn("Einfache Beschreibung zu VoidType");
 		
 		return option;
 	}

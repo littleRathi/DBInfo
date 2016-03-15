@@ -5,13 +5,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import de.bs.cli.jpar.internal.Defaults;
+
 // TODO Rename property values to validValues()?
 // rename annotation to ValidArguments is wrong, because values is not required
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})
 public @interface Arguments {
-	String name() default "";
-	String delimiter() default "";
+	String name() default Defaults.NAME;
+	String delimiter() default Defaults.DELIMITER;
 	// must be set, when the Annotation is added with the 
 	// @Argument annotation (so the field, contains the
 	// target for the selected value! In this case, name
@@ -19,5 +21,5 @@ public @interface Arguments {
 	// the the return 
 	// 2016.03.03 -> perhaps not needed to be set, if not set
 	// it is a flexible list of sourceType divided by the given delimiter sign
-	String[] values() default {}; 
+	String[] values() default {};
 }

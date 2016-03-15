@@ -41,7 +41,7 @@ public class HelpParameter extends ExtractedOption {
 	}
 
 	@Override
-	public void prozessArg(Object program, String option, String argument, Parameters args) {
+	public void processArg(Object program, String option, String argument, Parameters args) {
 		System.out.println(de.bs.cli.jpar.JPar.manual(program.getClass()));
 		System.exit(0);
 	}

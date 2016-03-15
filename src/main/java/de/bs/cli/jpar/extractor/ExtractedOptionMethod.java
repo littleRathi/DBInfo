@@ -37,7 +37,7 @@ public class ExtractedOptionMethod extends ExtractedOption {
 	}
 
 	@Override
-	public void prozessArg(final Object program, final String option, final String argument, final Parameters args) {
+	public void processArg(final Object program, final String option, final String argument, final Parameters args) {
 		Object value = null;
 		try {
 			value = getType().processArgs(option, argument, args);
