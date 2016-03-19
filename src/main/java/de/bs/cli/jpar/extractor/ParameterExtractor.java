@@ -1,5 +1,7 @@
 package de.bs.cli.jpar.extractor;
 
+import static de.bs.cli.jpar.extractor.ExtractedOption.asOptionName;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.bs.cli.jpar.Option;
+import de.bs.cli.jpar.config.Consts;
 import de.bs.cli.jpar.JParException;
 import de.bs.cli.jpar.CliProgram;
 import de.bs.cli.jpar.Arguments;
@@ -75,7 +78,7 @@ public class ParameterExtractor implements ExceptionMessages {
 			if (arguments != null) {
 				Option option = field.getAnnotation(Option.class); // for verification 
 				
-				String optionName = getOptionName(arguments, option, "field", field.toString());
+				String optionName = getOptionName(arguments, option, Consts.FIELD, field.toString());
 				ExtractedArguments exArguments = ExtractedArguments.getAnnotationOnField(arguments, option, optionName, field);
 				
 				addExtractedArguments(exArguments, optionName, extractedArguments);
@@ -92,7 +95,7 @@ public class ParameterExtractor implements ExceptionMessages {
 			if (arguments != null) {
 				Option option = method.getAnnotation(Option.class); // for verification
 				
-				String optionName = getOptionName(arguments, option, "method", method.toString());
+				String optionName = getOptionName(arguments, option, Consts.METHOD, method.toString());
 				ExtractedArguments exArguments = ExtractedArguments.getAnnotationOnMethod(arguments, option, optionName, method);
 
 				addExtractedArguments(exArguments, optionName, extractedArguments);
@@ -116,7 +119,7 @@ public class ParameterExtractor implements ExceptionMessages {
 			throw new JParException(EXC_EXTRACTOR_ARGUMENTS_NAME_MISSING, elementName, classDefinition);
 		}
 		
-		return "-" + (option != null ? option.name() : arguments.name());
+		return asOptionName(option != null ? option.name() : arguments.name());
 	}
 	
 	private void extractDataFromFields(final Class<?> programClass, final Map<String, ExtractedArguments> extractedArguments) {
@@ -127,7 +130,7 @@ public class ParameterExtractor implements ExceptionMessages {
 			if (option != null) {
 				field.setAccessible(true);
 				
-				ExtractedOption ea = new ExtractedOptionField(field, option, extractedArguments.get("-" + option.name()));
+				ExtractedOption ea = new ExtractedOptionField(field, option, extractedArguments.get(asOptionName(option.name())));
 				addExtractedParameter(ea);
 			}
 		}
@@ -141,7 +144,7 @@ public class ParameterExtractor implements ExceptionMessages {
 			if (option != null) {
 				method.setAccessible(true);
 				
-				ExtractedOption ea = new ExtractedOptionMethod(method, option, extractedArguments.get("-" + option.name()));
+				ExtractedOption ea = new ExtractedOptionMethod(method, option, extractedArguments.get(asOptionName(option.name())));
 				addExtractedParameter(ea);
 			}
 		}

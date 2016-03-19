@@ -11,6 +11,7 @@ import de.bs.cli.jpar.extractor.ExtractedOption;
 import de.bs.cli.jpar.extractor.ExtractedProgram;
 
 // VERY simple implementation! Very Simple Implementation of EL Like Language =>  VSIELLL
+// change to LaTeX style, for this could be the better choice
 public class ExpressionLanguage {
 	private static final String PATTERN_SIMPLE_EXPRESSION_LANGUATE = "\\$\\{([a-zA-Z\\*][a-zA-Z0-9\\.\\*:]*)\\}";
 

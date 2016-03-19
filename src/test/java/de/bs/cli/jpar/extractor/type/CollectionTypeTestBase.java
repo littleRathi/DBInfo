@@ -1,9 +1,10 @@
 package de.bs.cli.jpar.extractor.type;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -17,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.bs.cli.jpar.JParException;
+import de.bs.cli.jpar.config.Consts;
 import de.bs.cli.jpar.extractor.ExtractedOption;
 import de.bs.cli.jpar.extractor.ExtractedArguments;
 import de.bs.cli.jpar.process.Parameters;
@@ -45,12 +47,10 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 	};
 	
 	protected abstract Class<T> getCollectionType();
-	
 	protected abstract Collection getCollectionInstance();
-	
 	protected abstract Collection getWrongCollectionInstance();
 		
-	private ExtractedArguments mockExtractedArgumentsDelimiter() {
+	private ExtractedArguments mockExtractedArgumentsFull() {
 		arguments = mock(ExtractedArguments.class);
 		when(arguments.getDelimiter()).thenReturn(DELIMITER);
 		when(arguments.getValues()).thenReturn(ALLOWED_VALUES);
@@ -62,6 +62,12 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 		arguments = mock(ExtractedArguments.class);
 		when(arguments.getDelimiter()).thenReturn(DELIMITER);
 		
+		return arguments;
+	}
+	
+	private ExtractedArguments mockExtractedArgumentsEmpty() {
+		arguments = mock(ExtractedArguments.class);
+		when(arguments.getDelimiter()).thenReturn(Consts.EMPTY);
 		return arguments;
 	}
 	
@@ -77,7 +83,79 @@ public abstract class CollectionTypeTestBase<T extends Collection> {
 	
 	@Before
 	public void setupTest() {
-		testee = new CollectionType(getCollectionType(), mockExtractedOption(), mockExtractedArgumentsDelimiter());
+		testee = new CollectionType(getCollectionType(), mockExtractedOption(), mockExtractedArgumentsFull());
+	}
+
+	
+	// super ctor part
+	@Test(expected=JParException.class)
+	public void testSuperCtorMissingOption() {
+		testee = new CollectionType(getCollectionType(), null, mockExtractedArgumentsFull());
+		
+		fail();
+	}
+	
+	@Test(expected=JParException.class)
+	public void testSuperCtorMissingTargetType() {
+		testee = new CollectionType(null, option, mockExtractedArgumentsFull());
+		
+		fail();
+	}
+	
+	// CollectionType ctor part
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testCtorSuccess() {
+		option = mock(ExtractedOption.class);
+		when(option.getManualDescription()).thenReturn("Something meaningless");
+		when(option.getSourceType()).thenReturn(SOURCE_TYPE);
+		
+		testee = new CollectionType(getCollectionType(), option, mockExtractedArgumentsFull());
+		
+		assertThat(testee, notNullValue(CollectionType.class));
+	}
+
+	@Test(expected=JParException.class)
+	public void testCtorProvokeWrongSourceType() {
+		option = mock(ExtractedOption.class);
+		when(option.getOptionName()).thenReturn(EXTRACTED_ARGUMENT_ARG_NAME);
+		when(option.getSourceType()).thenReturn(null);
+		
+		testee = new CollectionType(getCollectionType(), option, mockExtractedArgumentsFull());
+		
+		fail();
+	}
+	
+	@Test(expected=JParException.class)
+	public void testCtorProvokeArgumentsIsNull() {
+		option = mock(ExtractedOption.class);
+		when(option.getOptionName()).thenReturn(EXTRACTED_ARGUMENT_ARG_NAME);
+		when(option.getManualDescription()).thenReturn("something meaningless as description");
+		
+		testee = new CollectionType(getCollectionType(), option, mockExtractedArgumentsFull());
+		
+		fail();
+	}
+	
+	@Test
+	public void testCtorEmptyArguments() {
+		testee = new CollectionType(getCollectionType(), mockExtractedOption(), mockExtractedArgumentsEmpty());
+		
+		assertThat(testee, notNullValue());
+	}
+	
+	@Test
+	public void testCtorArgumentsOnlyDelimiter() {
+		testee = new CollectionType(getCollectionType(), mockExtractedOption(), mockExtractedArgumentsDelimiterOnly());
+		
+		assertThat(testee, notNullValue());
+	}
+	
+	@Test
+	public void testCtorArgumentsFull() {
+		testee = new CollectionType(getCollectionType(), mockExtractedOption(), mockExtractedArgumentsFull());
+		
+		assertThat(testee, notNullValue());
 	}
 	
 	// type check test

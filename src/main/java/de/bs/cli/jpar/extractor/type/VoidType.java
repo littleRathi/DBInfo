@@ -12,7 +12,7 @@ public class VoidType extends Type {
 	public VoidType(final ExtractedOption option, final ExtractedArguments arguments) {
 		super(Void.class, option, arguments);
 		if (option.getSourceType() != null && option.getSourceType() != Void.class) {
-			throw new JParException(EXC_TYPE_SOURCE_MUST_NOT_BE_SET, option.getOptionName(), option.getSourceType(), "Boolean");
+			throw new JParException(EXC_TYPE_SOURCE_MUST_NOT_BE_SET, option.getOptionName(), option.getSourceType(), "Empty");
 		}
 		if (arguments != null) {
 			throw new JParException(EXC_TYPE_ARGUMENTS_NOT_ALLOWED, option.getOptionName());

@@ -117,7 +117,7 @@ public class InfoExtractor {
 		}
 	}
 	
-	@Arguments(name = "types", delimiter=";")
+	@Arguments(name = "types")
 	private static String[][] getTypeValues() {
 		return Values.createGroups(
 				Values.createSimpleValueList(Types.class), 

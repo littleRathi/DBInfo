@@ -1,13 +1,14 @@
 package de.bs.cli.jpar.extractor;
 
 import de.bs.cli.jpar.Option;
+import de.bs.cli.jpar.config.Consts;
+import de.bs.cli.jpar.config.Defaults;
 import de.bs.cli.jpar.JParException;
 import de.bs.cli.jpar.ExceptionMessages;
 import de.bs.cli.jpar.extractor.type.Type;
 import de.bs.cli.jpar.process.Parameters;
 
 public abstract class ExtractedOption implements ExceptionMessages {
-	private static final String ARGUMENT_NAME_PATTERN = "^[a-zA-Z0-9]+$";
 
 	private String elName; // like PROG or PW simple name given in @Argument.name().toUpperCase()
 	private String optionName; // (Optional) only by options; would be -PW: "-" @Argument.name() ":"
@@ -15,15 +16,18 @@ public abstract class ExtractedOption implements ExceptionMessages {
 	private Option option;
 	private Type type;
 	
+	public static String asOptionName(final String name) {
+		return Defaults.getOptionPrefix() + name;
+	}
 	
 	public ExtractedOption(final Option option, final ExtractedArguments arguments, final Class<?> targetType) {
-		if (option.name() == null || !option.name().matches(ARGUMENT_NAME_PATTERN)) {
-			throw new JParException(EXC_EXTRACTOR_NAME_WRONG_PATTERN, option.name(), ARGUMENT_NAME_PATTERN);
+		if (option.name() == null || !option.name().matches(Consts.ARGUMENT_NAME_PATTERN)) {
+			throw new JParException(EXC_EXTRACTOR_NAME_WRONG_PATTERN, option.name(), Consts.ARGUMENT_NAME_PATTERN);
 		}
 		
 		this.option = option;
 		this.elName = this.option.name().toUpperCase();
-		this.optionName = "-" + this.option.name();
+		this.optionName = asOptionName(this.option.name());
 		this.type = Type.getTypeProcessor(targetType, this, arguments);
 	}
 	

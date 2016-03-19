@@ -2,13 +2,14 @@ package de.bs.cli.jpar.extractor;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import de.bs.cli.jpar.JParException;
 import de.bs.cli.jpar.Option;
+import de.bs.cli.jpar.config.Defaults;
 import de.bs.cli.jpar.extractor.type.Type;
 import de.bs.cli.jpar.process.Parameters;
 
@@ -23,6 +24,9 @@ public abstract class ExtractedOptionBaseTest {
 	protected abstract Class<?> getSourceType();
 	protected abstract String getManualDecription();
 	protected abstract boolean getRequired();
+	protected abstract String successArgument();
+	protected abstract void successCheck();
+	protected abstract String failArgument();
 	
 	
 	@Test
@@ -43,7 +47,7 @@ public abstract class ExtractedOptionBaseTest {
 	public void testGetOptionName() {
 		String result = testee.getOptionName();
 		
-		assertThat(result, equalTo("-" + getName()));
+		assertThat(result, equalTo(ExtractedOption.asOptionName(getName())));
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -98,10 +102,22 @@ public abstract class ExtractedOptionBaseTest {
 	}
 	
 	@Test
-	public void testProcessArg() {
-//		String argument = null;
-//		Parameters args = new Parameters(new String[]{argument});
-//		testee.processArg(this, "-" + getName(), argument, args);
+	public void testProcessArgSuccess() {
+		String argument = successArgument();
+		String optionName = ExtractedOption.asOptionName(getName());
+		Parameters args = new Parameters(new String[]{optionName + Defaults.getOptionDelimiter() + argument});
+		testee.processArg(this, optionName, argument, args);
+		
+		successCheck();
+	}
+	
+	@Test(expected=JParException.class)
+	public void testProcessArgFail() {
+		String argument = failArgument();
+		String optionName = ExtractedOption.asOptionName(getName());
+		Parameters args = new Parameters(new String[]{optionName + Defaults.getOptionDelimiter() + argument});
+		testee.processArg(this, ExtractedOption.asOptionName(getName()), argument, args);
+		
 		fail();
 	}
 }

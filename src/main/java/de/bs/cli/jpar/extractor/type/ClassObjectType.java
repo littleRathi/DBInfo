@@ -45,6 +45,6 @@ public class ClassObjectType extends Type {
 				throw new JParException(EXC_TYPE_OBJECT_NOT_INSTANTIABLE, className, getOption().getOptionName());
 			}
 		}
-		return null;
+		return null; // TODO: throw JParException(Missing argument for option '...' ...
 	}
 }

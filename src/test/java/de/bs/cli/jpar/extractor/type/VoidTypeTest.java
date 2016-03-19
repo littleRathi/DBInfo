@@ -42,6 +42,32 @@ public class VoidTypeTest {
 		testee = new VoidType(mockExtractedOption(), null);
 	}
 	
+	// super ctor part
+	@Test(expected=JParException.class)
+	public void testSuperCtorMissingOption() {
+		testee = new VoidType(null, null);
+		
+		fail();
+	}
+
+	// CollectionType ctor part
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test(expected=JParException.class)
+	public void testCtorWrongSourceType() {
+		when(option.getSourceType()).thenReturn((Class)String.class);
+		
+		testee = new VoidType(option, null);
+		
+		fail();
+	}
+	
+	@Test(expected=JParException.class)
+	public void testCtorIllegalArguments() {
+		testee = new VoidType(mockExtractedOption(), mock(ExtractedArguments.class));
+		
+		fail();
+	}
+	
 	// testcases:Type (superclass)
 	@Test
 	public void testGetOption() {

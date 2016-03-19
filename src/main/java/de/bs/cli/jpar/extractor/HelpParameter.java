@@ -3,6 +3,7 @@ package de.bs.cli.jpar.extractor;
 import java.lang.annotation.Annotation;
 
 import de.bs.cli.jpar.Option;
+import de.bs.cli.jpar.config.Consts;
 import de.bs.cli.jpar.process.Parameters;
 
 public class HelpParameter extends ExtractedOption {
@@ -15,7 +16,7 @@ public class HelpParameter extends ExtractedOption {
 
 			@Override
 			public String name() {
-				return "help";
+				return Consts.NAME_HELP;
 			}
 
 			@Override
@@ -37,7 +38,7 @@ public class HelpParameter extends ExtractedOption {
 
 	@Override
 	public String getTargetName() {
-		return ":help";
+		return Consts.PHANTOM_TARGET_NAME_PREFIX + Consts.NAME_HELP;
 	}
 
 	@Override

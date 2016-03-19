@@ -52,6 +52,25 @@ public class StringTypeTest {
 	public void setupTest() {
 		testee = new StringType(mockExtractedOption(), null);
 	}
+
+	// super ctor part
+	@Test(expected=JParException.class)
+	public void testSuperCtorMissingOption() {
+		testee = new StringType(null, null);
+		
+		fail();
+	}
+
+	// ctor part
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test(expected=JParException.class)
+	public void testCtorIllegalSourceType() {
+		when(option.getSourceType()).thenReturn((Class)String.class);
+		
+		testee = new StringType(option, null);
+		
+		fail();
+	}
 	
 	// testcases:Type (superclass)
 	@Test

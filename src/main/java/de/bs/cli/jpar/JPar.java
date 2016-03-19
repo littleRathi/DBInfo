@@ -1,21 +1,18 @@
 package de.bs.cli.jpar;
 
-import de.bs.cli.jpar.internal.Defaults;
+import de.bs.cli.jpar.config.Consts;
+import de.bs.cli.jpar.config.Defaults;
 import de.bs.cli.jpar.manual.ParameterManual;
 import de.bs.cli.jpar.process.ParameterProcess;
 
-public class JPar {
-	public static final String PROG = Defaults.PROG_SHORTCUT;
+public class JPar implements ExceptionMessages {
+	public static final String PROG = Consts.PROG_SHORTCUT;
 	
-	private static final String EXCEPTION_MISSING_CALLABLE_PROGRAM = "No Class found in the stacktrace that has the @" + CliProgram.class + " annotation.";
-	
-	// TODO Naming -> extractArguments
 	public static void process(final Object program, final String[] args) {
 		ParameterProcess ap = new ParameterProcess();
 		ap.processArgs(program, args);
 	}
 	
-	// TODO Naming -> helpArguments
 	public static String manual() {
 		StackTraceElement[] stackClasses = Thread.currentThread().getStackTrace();
 		
@@ -39,5 +36,17 @@ public class JPar {
 	public static String manual(final Class<?> programClass) {
 		ParameterManual co = new ParameterManual();
 		return co.createHelpDescription(programClass);
+	}
+	
+	public static void setDefaultListDelimiter(final String newDefaultListDelimiter) {
+		Defaults.setListDelimiter(newDefaultListDelimiter);
+	}
+	
+	public static void setDefaultOptionDelimiter(final String newDefaultOptionDelimiter) {
+		Defaults.setOptionDelimiter(newDefaultOptionDelimiter);
+	}
+	
+	public static void setDefaultOptionPrefix(final String newDefaultOptionPrefix) {
+		Defaults.setOptionPrefix(newDefaultOptionPrefix);
 	}
 }

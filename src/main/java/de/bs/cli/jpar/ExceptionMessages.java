@@ -1,6 +1,8 @@
 package de.bs.cli.jpar;
 
 public interface ExceptionMessages {
+	String EXCEPTION_MISSING_CALLABLE_PROGRAM = "No Class found in the stacktrace that has the @" + CliProgram.class + " annotation.";
+	
 	String EXC_TYPE_MISSING_DELEMITER = "The property delimiter() from the annotation '@" + Arguments.class + "' have to be set for argument '%s', actual it is '%s'.";
 	String EXC_TYPE_MISSING_SOURCE_TYPE = "The property sourceType() from the annotation '@" + Option.class + "' have to be set for argument '%s', actual it is '%s'.";
 	String EXC_TYPE_INVALID_VALUE = "The values '%s' is not valid for '%s'.";
@@ -20,6 +22,8 @@ public interface ExceptionMessages {
 	String EXC_TYPE_SOURCE_MUST_BE_CLASS = "The property sourceType() from annotation '" + Option.class + "' type must be set to '" + Class.class + "' for parameter '%s' but is '%s'.";
 	String EXC_TYPE_SOURCE_MUST_NOT_BE_SET = "The property sourceType() from annotation '" + Option.class + "' must not be set for parameter '%s', sourceType() is '%s' for %s.";
 	String EXC_TYPE_ARGUMENTS_NOT_ALLOWED = "For Option '%s' is no '" + Arguments.class + "' annotation allowed.";
+	String EXC_TYPE_TARGET_TYPE_IS_NULL = "The target type is null for option '%s'.";
+	String EXC_TYPE_MISSING_OPTION_ANNOTATION = "Missing '" + Option.class + "' annotation, with given target type '%s'.";
 	
 	String EXC_EXTRACTOR_DOUBLE_OPTION = "There is already a argument with the name '-%s:'.";
 	String EXC_EXTRACTOR_SEVERAL_ARGUMENT_PROGRAM = "The class '%s' contains serveral '@" + CliProgram.class + "' Annotations, but only one is allowed.";

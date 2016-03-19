@@ -22,7 +22,7 @@ public class ExtractedArgumentsMethodTest {
 	private Option option;
 	
 	private static String NAME = "test";
-	private static String OPTION_NAME = "-" + NAME;
+	private static String OPTION_NAME = ExtractedOption.asOptionName(NAME);
 	
 	private static String VALUE_A00 = "a00";
 	private static String VALUE_A01 = "a01";

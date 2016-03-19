@@ -51,7 +51,7 @@ public class ParameterManual {
 	
 	private void buildManualForOptionsPart(final StringBuilder sbInfo, final Class<?> programClass) {
 		for (ExtractedOption option: argExtractor.getExtractedOptions()) {
-			StringBuilder sbOption = new StringBuilder( option.getOptionName()).append(": ");
+			StringBuilder sbOption = new StringBuilder(option.getOptionName()).append(": ");
 			
 			if (option.isRequired()) {
 				sbOption.append("(required option) ");

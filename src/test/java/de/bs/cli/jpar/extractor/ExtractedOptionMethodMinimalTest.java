@@ -1,10 +1,9 @@
 package de.bs.cli.jpar.extractor;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import static org.hamcrest.Matchers.equalTo;
-
-import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import org.junit.Before;
 
@@ -12,32 +11,34 @@ import de.bs.cli.jpar.Option;
 import de.bs.cli.jpar.config.Consts;
 import de.bs.cli.jpar.extractor.type.BooleanType;
 
-public class ExtractedOptionFieldMinimalTest extends ExtractedOptionBaseTest {
+public class ExtractedOptionMethodMinimalTest extends ExtractedOptionBaseTest {
 	public static final String OPT_NAME = "all";
-	public static final String OPT_DESCRIPTION = "example description test abc";
-	public static final String OPT_FIELD_NAME = "testFieldMinimal";
+	public static final String OPT_DESCRIPTION = "example description for method test all...";
+	public static final String OPT_METHOD_NAME = "testMethodMinimal";
 	public static final String ARG_FAIL = "fail";
-	public Field optField;
+	public Method optMethod;
 	
 	@Option(name=OPT_NAME, description=OPT_DESCRIPTION)
-	private boolean testFieldMinimal;
-
-	private Field getField() throws NoSuchFieldException, SecurityException {
-		return getClass().getDeclaredField(OPT_FIELD_NAME);
+	public void testMethodMinimal(final boolean bool) {
+		container = bool;
 	}
+	public boolean container;
 	
-	private Option getOptionAnnotation(final Field field) {
-		return field.getAnnotation(Option.class);
+	private Method getMethod() throws NoSuchMethodException, SecurityException {
+		return getClass().getDeclaredMethod(OPT_METHOD_NAME, new Class<?>[]{boolean.class});
+	}
+
+	private Option getOptionAnnotation(final Method method) {
+		return method.getAnnotation(Option.class);
 	}
 	
 	@Before
-	public void setupTest() throws NoSuchFieldException, SecurityException {
-		optField = getField();
-		optField.setAccessible(true);
-		this.option = getOptionAnnotation(optField);
-		this.testee = new ExtractedOptionField(optField, option, null);
+	public void setupTest() throws NoSuchMethodException, SecurityException {
+		optMethod = getMethod();
+		this.option = getOptionAnnotation(optMethod);
+		this.testee = new ExtractedOptionMethod(optMethod, option, null);
 	}
-	
+
 	@Override
 	protected String getName() {
 		return OPT_NAME;
@@ -50,7 +51,7 @@ public class ExtractedOptionFieldMinimalTest extends ExtractedOptionBaseTest {
 
 	@Override
 	protected String getTargetName() {
-		return OPT_FIELD_NAME;
+		return OPT_METHOD_NAME;
 	}
 
 	@Override
@@ -75,12 +76,11 @@ public class ExtractedOptionFieldMinimalTest extends ExtractedOptionBaseTest {
 	
 	@Override
 	protected void successCheck() {
-		assertThat(testFieldMinimal, equalTo(Boolean.TRUE));
+		assertThat(container, equalTo(Boolean.TRUE));
 	}
 	
 	@Override
 	protected String failArgument()  {
 		return ARG_FAIL;
 	}
-
 }

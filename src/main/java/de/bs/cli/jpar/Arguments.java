@@ -5,15 +5,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import de.bs.cli.jpar.internal.Defaults;
+import de.bs.cli.jpar.config.Consts;
 
 // TODO Rename property values to validValues()?
 // rename annotation to ValidArguments is wrong, because values is not required
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})
 public @interface Arguments {
-	String name() default Defaults.NAME;
-	String delimiter() default Defaults.DELIMITER;
+	String name() default Consts.NAME;
+	String delimiter() default Consts.EMPTY; //Consts.LIST_DELIMITER; // change to EMPTY and later if empty change to default
 	// must be set, when the Annotation is added with the 
 	// @Argument annotation (so the field, contains the
 	// target for the selected value! In this case, name

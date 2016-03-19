@@ -7,7 +7,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 
 import org.junit.Before;
@@ -16,26 +16,29 @@ import de.bs.cli.jpar.Option;
 import de.bs.cli.jpar.config.Consts;
 import de.bs.cli.jpar.config.Defaults;
 
-public class ExtractedOptionFieldAllTest extends ExtractedOptionBaseTest {
+public class ExtractedOptionMethodAllTest extends ExtractedOptionBaseTest {
 	private static final Class<?> OPT_SOURCE_TYPE = String.class;
 	public static final String OPT_NAME = "all";
-	public static final String OPT_DESCRIPTION = "example description bla bla bla";
+	public static final String OPT_DESCRIPTION = "example description for method test all...";
 	public static final boolean OPT_REQUIRED = !Consts.REQUIRED;
-	public static final String OPT_FIELD_NAME = "testFieldAll";
+	public static final String OPT_METHOD_NAME = "testMethodAll";
 	public static final String[][] ARG_VALID = {{"a", "b"}};
 	public static final String ARG_SUCCESS = "a" + Defaults.getListDelimiter() + "b";
 	public static final String ARG_FAIL = "b" + Defaults.getListDelimiter() + "c";
-	public Field optField;
+	public Method optMethod;
 	
-	@Option(name=OPT_NAME, description = OPT_DESCRIPTION, required=OPT_REQUIRED, sourceType=String.class)
-	private Collection<String> testFieldAll;
-	
-	private Field getField() throws NoSuchFieldException, SecurityException {
-		return getClass().getDeclaredField(OPT_FIELD_NAME);
+	@Option(name=OPT_NAME, description=OPT_DESCRIPTION, required=OPT_REQUIRED, sourceType=String.class)
+	public void testMethodAll(final Collection<String> collection) {
+		container = collection;
 	}
+	private Collection<String> container;
 	
-	private Option getOptionAnnotation(final Field field) {
-		return field.getAnnotation(Option.class);
+	private Method getMethod() throws NoSuchMethodException, SecurityException {
+		return getClass().getDeclaredMethod(OPT_METHOD_NAME, new Class<?>[]{Collection.class});
+	}
+
+	private Option getOptionAnnotation(final Method method) {
+		return method.getAnnotation(Option.class);
 	}
 	
 	private ExtractedArguments mockArguments() {
@@ -47,13 +50,12 @@ public class ExtractedOptionFieldAllTest extends ExtractedOptionBaseTest {
 	}
 	
 	@Before
-	public void setupTest() throws NoSuchFieldException, SecurityException {
-		optField = getField();
-		optField.setAccessible(true);
-		this.option = getOptionAnnotation(optField);
-		this.testee = new ExtractedOptionField(optField, option, mockArguments());
+	public void setupTest() throws NoSuchMethodException, SecurityException {
+		optMethod = getMethod();
+		this.option = getOptionAnnotation(optMethod);
+		this.testee = new ExtractedOptionMethod(optMethod, option, mockArguments());
 	}
-
+	
 	@Override
 	protected String getName() {
 		return OPT_NAME;
@@ -61,12 +63,13 @@ public class ExtractedOptionFieldAllTest extends ExtractedOptionBaseTest {
 
 	@Override
 	protected Class<?> getTargetType() {
-		return optField.getType();
+		Class<?>[] params = optMethod.getParameterTypes();
+		return params[0];
 	}
 
 	@Override
 	protected String getTargetName() {
-		return OPT_FIELD_NAME;
+		return OPT_METHOD_NAME;
 	}
 
 	@Override
@@ -91,9 +94,9 @@ public class ExtractedOptionFieldAllTest extends ExtractedOptionBaseTest {
 	
 	@Override
 	protected void successCheck() {
-		assertThat(testFieldAll, notNullValue());
-		assertThat(testFieldAll, hasSize(2));
-		assertThat(testFieldAll, hasItems("a", "b"));
+		assertThat(container, notNullValue());
+		assertThat(container, hasSize(2));
+		assertThat(container, hasItems("a", "b"));
 	}
 	
 	@Override

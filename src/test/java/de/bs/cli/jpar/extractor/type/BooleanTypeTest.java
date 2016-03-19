@@ -45,6 +45,31 @@ public class BooleanTypeTest {
 		testee = new BooleanType(mockExtractedOption(), null);
 	}
 	
+	// super ctor part
+	@Test(expected=JParException.class)
+	public void testSuperCtorMissingOption() {
+		testee = new BooleanType(null, null);
+		
+		fail();
+	}
+	// ctor part
+	@Test(expected=JParException.class)
+	public void testCtorWithArguments() {
+		testee = new BooleanType(mockExtractedOption(), mock(ExtractedArguments.class));
+		
+		fail();
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test(expected=JParException.class)
+	public void testCtorSourceType() {
+		when(option.getSourceType()).thenReturn((Class)String.class);
+		
+		testee = new BooleanType(option, null);
+		
+		fail();
+	}
+	
 	// testcases:Type (superclass)
 	@Test
 	public void testGetOption() {

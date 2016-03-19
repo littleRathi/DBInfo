@@ -16,6 +16,12 @@ public abstract class Type implements ExceptionMessages {
 	private ExtractedArguments arguments;
 	
 	public Type(final Class<?> targetType, final ExtractedOption option, final ExtractedArguments arguments) {
+		if (option == null) {
+			throw new JParException(EXC_TYPE_MISSING_OPTION_ANNOTATION, targetType);
+		}
+		if (targetType == null) {
+			throw new JParException(EXC_TYPE_TARGET_TYPE_IS_NULL, option.getOptionName());
+		}
 		this.targetType = targetType;
 		this.option = option;
 		this.arguments = arguments;

@@ -65,6 +65,32 @@ public class ClassObjectTypeTest {
 		testee = new ClassObjectType(TARGET_TYPE, mockExtractedOption(), null);
 	}
 	
+	// super ctor part
+	@Test(expected=JParException.class)
+	public void testSuperCtorMissingOption() {
+		testee = new ClassObjectType(TARGET_TYPE, null, null);
+		
+		fail();
+	}
+	
+	@Test(expected=JParException.class)
+	public void testSuperCtorMissingTargetType() {
+		testee = new ClassObjectType(null, mockExtractedOption(), null);
+		
+		fail();
+	}
+	
+	// ctor part
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test(expected=JParException.class)
+	public void testCtorWrongSourceType() {
+		when(option.getSourceType()).thenReturn((Class)String.class);
+		
+		testee = new ClassObjectType(TARGET_TYPE, option, null);
+		
+		fail();
+	}
+	
 	// testcases:Type (superclass)
 	@Test
 	public void testGetOption() {

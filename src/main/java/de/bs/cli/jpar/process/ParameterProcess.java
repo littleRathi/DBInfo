@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.bs.cli.jpar.JParException;
+import de.bs.cli.jpar.config.Consts;
+import de.bs.cli.jpar.config.Defaults;
 import de.bs.cli.jpar.ExceptionMessages;
 import de.bs.cli.jpar.extractor.ParameterExtractor;
 import de.bs.cli.jpar.extractor.ExtractedOption;
@@ -32,7 +34,7 @@ public class ParameterProcess implements ExceptionMessages {
 		while (arguments.next()) {
 			String parameter = arguments.get();
 			String option = getOption(parameter);
-			String argument = (parameter.length() > option.length()) ? parameter.substring(option.length() + 1) : "";
+			String argument = (parameter.length() > option.length()) ? parameter.substring(option.length() + 1) : Consts.EMPTY;
 			
 			ExtractedOption op = argExtractor.getExtractedOptionForForOptionName(option);
 			if (op != null) {
@@ -44,7 +46,7 @@ public class ParameterProcess implements ExceptionMessages {
 	}
 	
 	private String getOption(final String argPart) {
-		String[] split = argPart.split(":");
+		String[] split = argPart.split(Defaults.getOptionDelimiter());
 		return split[0];
 	}
 	

@@ -22,8 +22,8 @@ public class ExtractedArgumentsFieldTest {
 	private Arguments arguments;
 	private Option option;
 	
-	private static String NAME = "test";
-	private static String OPTION_NAME = "-" + NAME;
+	private static final String NAME = "test";
+	private static final String OPTION_NAME = ExtractedOption.asOptionName(NAME);
 	
 	private static Arguments getArgumentsAnnotation(final Field field) {
 		return field.getAnnotation(Arguments.class);

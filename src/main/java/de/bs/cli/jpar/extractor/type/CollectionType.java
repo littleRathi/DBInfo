@@ -27,9 +27,10 @@ public class CollectionType extends Type {
 		if (arguments == null) {
 			throw new JParException(EXC_TYPE_MISSING_VALUES, getOption().getOptionName());
 		}
-		if (arguments.getDelimiter() == null || arguments.getDelimiter().isEmpty()) {
-			throw new JParException(EXC_TYPE_MISSING_DELEMITER, option.getOptionName(), arguments.getDelimiter());
-		}
+//		TODO: not needed anymore if not set, fall back to Defaults.getListDelimiter()
+//		if (arguments.getDelimiter() == null || arguments.getDelimiter().isEmpty()) {
+//			throw new JParException(EXC_TYPE_MISSING_DELEMITER, option.getOptionName(), arguments.getDelimiter());
+//		}
 		if (arguments.getValues() != null && arguments.getValues().length > 0) {
 			genericType = String.class;
 		}
