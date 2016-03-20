@@ -10,9 +10,9 @@ import java.util.Set;
 
 import de.bs.cli.jpar.Option;
 import de.bs.cli.jpar.config.Defaults;
+import de.bs.cli.jpar.config.ExceptionMessages;
 import de.bs.cli.jpar.JParException;
 import de.bs.cli.jpar.Arguments;
-import de.bs.cli.jpar.ExceptionMessages;
 
 public class ExtractedArguments implements ExceptionMessages {
 	private Arguments arguments;

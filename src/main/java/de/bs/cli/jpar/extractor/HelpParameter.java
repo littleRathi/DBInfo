@@ -2,6 +2,7 @@ package de.bs.cli.jpar.extractor;
 
 import java.lang.annotation.Annotation;
 
+import de.bs.cli.jpar.JParException;
 import de.bs.cli.jpar.Option;
 import de.bs.cli.jpar.config.Consts;
 import de.bs.cli.jpar.process.Parameters;
@@ -43,6 +44,9 @@ public class HelpParameter extends ExtractedOption {
 
 	@Override
 	public void processArg(Object program, String option, String argument, Parameters args) {
+		if (argument != null && !argument.isEmpty()) {
+			throw new JParException(EXC_PROCESS_NO_ARGUMENT_ALLOWED, getOptionName());
+		}
 		System.out.println(de.bs.cli.jpar.JPar.manual(program.getClass()));
 		System.exit(0);
 	}

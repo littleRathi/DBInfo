@@ -12,10 +12,10 @@ import java.util.Map;
 
 import de.bs.cli.jpar.Option;
 import de.bs.cli.jpar.config.Consts;
+import de.bs.cli.jpar.config.ExceptionMessages;
 import de.bs.cli.jpar.JParException;
 import de.bs.cli.jpar.CliProgram;
 import de.bs.cli.jpar.Arguments;
-import de.bs.cli.jpar.ExceptionMessages;
 
 public class ParameterExtractor implements ExceptionMessages {
 	private ExtractedProgram program;

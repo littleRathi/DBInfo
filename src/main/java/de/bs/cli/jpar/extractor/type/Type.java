@@ -3,7 +3,7 @@ package de.bs.cli.jpar.extractor.type;
 import java.util.Collection;
 
 import de.bs.cli.jpar.JParException;
-import de.bs.cli.jpar.ExceptionMessages;
+import de.bs.cli.jpar.config.ExceptionMessages;
 import de.bs.cli.jpar.extractor.ExtractedOption;
 import de.bs.cli.jpar.extractor.ExtractedArguments;
 import de.bs.cli.jpar.extractor.HelpParameter;

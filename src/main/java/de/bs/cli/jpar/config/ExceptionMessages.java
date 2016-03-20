@@ -1,4 +1,8 @@
-package de.bs.cli.jpar;
+package de.bs.cli.jpar.config;
+
+import de.bs.cli.jpar.Arguments;
+import de.bs.cli.jpar.CliProgram;
+import de.bs.cli.jpar.Option;
 
 public interface ExceptionMessages {
 	String EXCEPTION_MISSING_CALLABLE_PROGRAM = "No Class found in the stacktrace that has the @" + CliProgram.class + " annotation.";
@@ -48,6 +52,9 @@ public interface ExceptionMessages {
 	String EXC_EXTRACTOR_VALUES_METHOD_NO_PARAMETERS = "The method '%s' cannot have any parameters, but have a count of '%s' parameters.";
 	String EXC_EXTRACTOR_FIELD_NOT_STATIC = "The element '%s' is static, a element with a '@" + Option.class + "' annotation havn't to be static.";
 	String EXC_EXTRACTOR_ARGUMENTS_DOUBLE = "There is already element with a '" + Arguments.class + "' annotation assign to option '%s'.";
+	String EXC_EXTRACTOR_MISSING_PROG_CLASS = "Missing a class that taht contains the '" + CliProgram.class + "' annotation.";
+	String EXC_EXTRACTOR_MISSING_PROG_ANNOTATION = "Missing '" + CliProgram.class + "' annotation for the given class '%s'.";
 	
 	String EXC_PROCESS_MISSING_REQUIRED_ARGUMENTS = "Missing following required arguments: '%s'.";
+	String EXC_PROCESS_NO_ARGUMENT_ALLOWED = "For option '%s' are no arguments allowed.";
 }

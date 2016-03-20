@@ -5,10 +5,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.bs.cli.jpar.JPar;
-import de.bs.cli.jpar.extractor.ParameterExtractor;
+import de.bs.cli.jpar.config.Consts;
 import de.bs.cli.jpar.extractor.ExtractedOption;
 import de.bs.cli.jpar.extractor.ExtractedProgram;
+import de.bs.cli.jpar.extractor.ParameterExtractor;
 
 // VERY simple implementation! Very Simple Implementation of EL Like Language =>  VSIELLL
 // change to LaTeX style, for this could be the better choice
@@ -115,7 +115,7 @@ public class ExpressionLanguage {
 	}
 	
 	private void extractReferencesFrom(final ExtractedProgram program) {
-		elDefaults.put(JPar.PROG, program.getProgramName());
+		elDefaults.put(Consts.PROG_SHORTCUT, program.getProgramName());
 		elDefaults.put("PROG.class.full", program.getType().getName());
 		elDefaults.put("PROG.class.single", program.getType().getSimpleName());
 	}

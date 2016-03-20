@@ -1,13 +1,11 @@
 package de.bs.cli.jpar;
 
-import de.bs.cli.jpar.config.Consts;
 import de.bs.cli.jpar.config.Defaults;
+import de.bs.cli.jpar.config.ExceptionMessages;
 import de.bs.cli.jpar.manual.ParameterManual;
 import de.bs.cli.jpar.process.ParameterProcess;
 
 public class JPar implements ExceptionMessages {
-	public static final String PROG = Consts.PROG_SHORTCUT;
-	
 	public static void process(final Object program, final String[] args) {
 		ParameterProcess ap = new ParameterProcess();
 		ap.processArgs(program, args);

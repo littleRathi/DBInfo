@@ -3,8 +3,8 @@ package de.bs.cli.jpar.extractor;
 import de.bs.cli.jpar.Option;
 import de.bs.cli.jpar.config.Consts;
 import de.bs.cli.jpar.config.Defaults;
+import de.bs.cli.jpar.config.ExceptionMessages;
 import de.bs.cli.jpar.JParException;
-import de.bs.cli.jpar.ExceptionMessages;
 import de.bs.cli.jpar.extractor.type.Type;
 import de.bs.cli.jpar.process.Parameters;
 
@@ -20,13 +20,17 @@ public abstract class ExtractedOption implements ExceptionMessages {
 		return Defaults.getOptionPrefix() + name;
 	}
 	
+	public static String asElName(final String name) {
+		return name.toUpperCase();
+	}
+	
 	public ExtractedOption(final Option option, final ExtractedArguments arguments, final Class<?> targetType) {
 		if (option.name() == null || !option.name().matches(Consts.ARGUMENT_NAME_PATTERN)) {
 			throw new JParException(EXC_EXTRACTOR_NAME_WRONG_PATTERN, option.name(), Consts.ARGUMENT_NAME_PATTERN);
 		}
 		
 		this.option = option;
-		this.elName = this.option.name().toUpperCase();
+		this.elName = asElName(this.option.name());
 		this.optionName = asOptionName(this.option.name());
 		this.type = Type.getTypeProcessor(targetType, this, arguments);
 	}

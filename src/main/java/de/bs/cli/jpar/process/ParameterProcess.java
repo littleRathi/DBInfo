@@ -6,7 +6,7 @@ import java.util.Map;
 import de.bs.cli.jpar.JParException;
 import de.bs.cli.jpar.config.Consts;
 import de.bs.cli.jpar.config.Defaults;
-import de.bs.cli.jpar.ExceptionMessages;
+import de.bs.cli.jpar.config.ExceptionMessages;
 import de.bs.cli.jpar.extractor.ParameterExtractor;
 import de.bs.cli.jpar.extractor.ExtractedOption;
 
