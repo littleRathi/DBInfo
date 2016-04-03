@@ -26,26 +26,10 @@ import de.bs.dbinfo.exporter.console.ConsoleExporter;
 @CliProgram(name = "DB Info Extractor", description = "This Programm extract (meta)data from a connection to a databse using JDBC. "
 		+ " To etablish a connection, the JDBC driver is needed, also with the required in classpath and the "
 		+ " options ${*.required} (see option description for more information on these options). "
-		+ " Here is a generated list: ")
+		+ " Here is a generated list: ",
+		authors={"littleRathi"})
 public class InfoExtractor {
 	private static final String OPTION_TYPE_SIMPLE = "simple";
-//	private static final String DELEMITER_TYPE = ";";
-
-//	protected static final String PW = "pw";
-//	private static final String USER = "user";
-//	private static final String URL = "url";
-//
-//	private static final String USE_EXPORTER = "exporter";
-//	private static final String SHOW_ALL = "all";
-//	private static final String SHOW_TABLES = "tables";
-//	private static final String SHOW_SCHEMAS = "schemas";
-//	private static final String SHOW_CATALOGS = "catalogs";
-//	private static final String SHOW_CONNECTION_INFO = "connectionInfo";
-//	private static final String SHOW_SUPPORT_VALUES = "supportValues";
-//	private static final String SHOW_MAX_VALUES = "maxValues";
-	private static final String SHOW_TYPE_INFO = "typeInfo";
-//	private static final String ALLOW_TYPES = "types";
-//	private static final String SHOW_META_DATA_INFO = "mataData";
 
 	@Option(name = "url", description = "The connection url for the database.", required = true)
 	private String url;
@@ -53,7 +37,6 @@ public class InfoExtractor {
 	private String user;
 	@Option(name = "pw", description = "The password for the given user for the database connection.", required = true)
 	private String pw;
-//	private int sufficientData = 0;
 
 	@Option(name = "metaData", description = "Enable or Disable the info category for mataData. Enable this, to see categories.")
 	private boolean showMetaDataInfo = true;
@@ -98,7 +81,7 @@ public class InfoExtractor {
 		}
 	}
 
-	@Option(name = "types", description = "List of type that should be shown if the argument " + SHOW_TYPE_INFO
+	@Option(name = "types", description = "List of type that should be shown if the argument ${TYPES} "
 			+ " is active.", sourceType=String.class)
 	private void setTypes(final Set<String> types) {
 		allowTypes = new HashSet<Integer>();
